@@ -68,7 +68,6 @@ export default function Contact() {
 
   const socialLinks = [
     { icon: SiSpotify, href: "#", label: "Spotify" },
-    { icon: SiApplemusic, href: "#", label: "Apple Music" },
     { icon: SiYoutube, href: "#", label: "YouTube" },
     { icon: SiInstagram, href: "#", label: "Instagram" },
     { icon: SiTiktok, href: "#", label: "TikTok" },

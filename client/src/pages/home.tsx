@@ -211,7 +211,6 @@ export default function Home() {
 
   const socialLinks = [
     { icon: SiSpotify, href: "#", label: "Spotify" },
-    { icon: SiApplemusic, href: "#", label: "Apple Music" },
     { icon: SiYoutube, href: "#", label: "YouTube" },
     { icon: SiInstagram, href: "#", label: "Instagram" },
     { icon: SiTiktok, href: "#", label: "TikTok" },
@@ -438,56 +437,72 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Music Section */}
-      <section id="music" className="py-20 bg-secondary">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-black tracking-widest mb-4">DISCOGRAPHY</h2>
-            <p className="text-muted-foreground text-lg">Explore our collection of anxiety-driven anthems</p>
+      {/* Featured Album Section */}
+      <section id="music" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-secondary">
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat" 
+          style={{
+            backgroundImage: "linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1571330735066-03aaa9429d89?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080')"
+          }}
+        />
+        
+        <div className="relative z-10 text-center px-4 max-w-5xl mx-auto">
+          <div className="mb-8">
+            <span className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-full text-lg font-bold tracking-widest mb-6 glow-pink">
+              FEATURED ALBUM
+            </span>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {releases.map((release) => (
-              <div key={release.id} className="group cursor-pointer" data-testid={`release-${release.id}`}>
-                <div className="relative overflow-hidden rounded-lg mb-4 aspect-square">
-                  <img 
-                    src={release.imageUrl}
-                    alt={`${release.title} Cover`}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-black bg-opacity-50 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
-                    <Play className="text-primary text-4xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  </div>
-                  {release.isNew && (
-                    <span className="absolute top-2 right-2 bg-primary text-primary-foreground px-2 py-1 rounded text-xs font-bold">
-                      NEW
-                    </span>
-                  )}
-                </div>
-                <h3 className="text-xl font-bold mb-1">{release.title}</h3>
-                <p className="text-muted-foreground text-sm mb-2">{release.type} • {release.year}</p>
-                <div className="flex gap-2">
-                  <button 
-                    className="text-primary hover:text-accent text-sm"
-                    data-testid={`release-${release.id}-spotify`}
-                  >
-                    <SiSpotify />
-                  </button>
-                  <button 
-                    className="text-primary hover:text-accent text-sm"
-                    data-testid={`release-${release.id}-apple`}
-                  >
-                    <SiApplemusic />
-                  </button>
-                  <button 
-                    className="text-primary hover:text-accent text-sm"
-                    data-testid={`release-${release.id}-youtube`}
-                  >
-                    <SiYoutube />
-                  </button>
+          <h2 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-wider mb-8 text-gradient">
+            INNER SPACE
+          </h2>
+          
+          <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto">
+            A journey through the depths of millennial consciousness, exploring the space between anxiety and hope
+          </p>
+          
+          {/* Album Cover and Streaming */}
+          <div className="flex flex-col lg:flex-row items-center justify-center gap-12 mb-12">
+            <div className="relative group">
+              <div className="w-80 h-80 md:w-96 md:h-96 rounded-lg overflow-hidden border-4 border-primary group-hover:border-accent transition-colors duration-300">
+                <img 
+                  src="https://images.unsplash.com/photo-1571330735066-03aaa9429d89?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400"
+                  alt="Inner Space Album Cover"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
+                  <Play className="text-primary text-6xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
               </div>
-            ))}
+            </div>
+            
+            <div className="text-center lg:text-left">
+              <h3 className="text-2xl font-bold mb-4">STREAM NOW</h3>
+              <div className="flex flex-col gap-4 w-64">
+                <Button 
+                  className="bg-[#1DB954] hover:bg-[#1ed760] text-white text-lg py-6"
+                  data-testid="inner-space-spotify"
+                >
+                  <SiSpotify className="mr-3 h-6 w-6" />
+                  Listen on Spotify
+                </Button>
+                <Button 
+                  className="bg-[#FF0000] hover:bg-[#ff3333] text-white text-lg py-6"
+                  data-testid="inner-space-youtube"
+                >
+                  <SiYoutube className="mr-3 h-6 w-6" />
+                  Watch on YouTube
+                </Button>
+                <Button 
+                  variant="outline"
+                  className="border-primary text-primary hover:bg-primary hover:text-primary-foreground text-lg py-6"
+                  data-testid="inner-space-all-platforms"
+                >
+                  <Music className="mr-3 h-6 w-6" />
+                  All Platforms
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </section>
