@@ -1,41 +1,78 @@
 import { motion } from "framer-motion";
-import { useQuery } from "@tanstack/react-query";
 import { Play } from "lucide-react";
-import type { Release } from "@shared/schema";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
-export default function Music() {
-  const { data: releases = [], isLoading } = useQuery<Release[]>({
-    queryKey: ["/api/releases"],
-  });
-
-  if (isLoading) {
-    return (
-      <section id="music" className="py-20 bg-secondary">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-black tracking-widest mb-4">
-              DISCOGRAPHY
-            </h2>
-            <p className="text-muted-foreground text-lg">
-              Explore our collection of anxiety-driven anthems
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="animate-pulse">
-                <div className="bg-muted rounded-lg aspect-square mb-4" />
-                <div className="bg-muted h-6 rounded mb-2" />
-                <div className="bg-muted h-4 rounded w-3/4" />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    );
+const releases = [
+  {
+    id: 1,
+    title: "PANIC ATTACK",
+    type: "Single",
+    year: "2024",
+    image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400",
+    isNew: true,
+    spotifyUrl: "#",
+    appleMusicUrl: "#",
+    youtubeUrl: "#"
+  },
+  {
+    id: 2,
+    title: "SUPERHERO COMPLEX",
+    type: "Album",
+    year: "2023",
+    image: "https://images.unsplash.com/photo-1571330735066-03aaa9429d89?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400",
+    isNew: false,
+    spotifyUrl: "#",
+    appleMusicUrl: "#",
+    youtubeUrl: "#"
+  },
+  {
+    id: 3,
+    title: "MILLENNIAL MELTDOWN",
+    type: "EP",
+    year: "2022",
+    image: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400",
+    isNew: false,
+    spotifyUrl: "#",
+    appleMusicUrl: "#",
+    youtubeUrl: "#"
+  },
+  {
+    id: 4,
+    title: "ANXIETY ANTHEM",
+    type: "Single",
+    year: "2022",
+    image: "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400",
+    isNew: false,
+    spotifyUrl: "#",
+    appleMusicUrl: "#",
+    youtubeUrl: "#"
+  },
+  {
+    id: 5,
+    title: "DIGITAL BREAKDOWN",
+    type: "Album",
+    year: "2021",
+    image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400",
+    isNew: false,
+    spotifyUrl: "#",
+    appleMusicUrl: "#",
+    youtubeUrl: "#"
+  },
+  {
+    id: 6,
+    title: "REBEL HEART",
+    type: "EP",
+    year: "2021",
+    image: "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400",
+    isNew: false,
+    spotifyUrl: "#",
+    appleMusicUrl: "#",
+    youtubeUrl: "#"
   }
+];
 
+export default function Music() {
   return (
     <section id="music" className="py-20 bg-secondary">
       <div className="container mx-auto px-4">

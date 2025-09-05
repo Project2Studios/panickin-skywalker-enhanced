@@ -1,39 +1,37 @@
 import { motion } from "framer-motion";
-import { useQuery } from "@tanstack/react-query";
-import type { BandMember } from "@shared/schema";
+
+const bandMembers = [
+  {
+    id: 1,
+    name: "ALEX SKYWALKER",
+    role: "LEAD VOCALS",
+    description: "The anxious superhero with a voice that channels millennial angst into anthemic choruses",
+    imageUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400",
+  },
+  {
+    id: 2,
+    name: "PENNY PANICK",
+    role: "RHYTHM GUITAR",
+    description: "Band mascot and comedic anxiety representation with killer riffs and infectious energy",
+    imageUrl: "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400",
+  },
+  {
+    id: 3,
+    name: "JAX",
+    role: "LEAD GUITAR",
+    description: "Lead guitarist with pure punk aesthetic and solos that cut through the noise",
+    imageUrl: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400",
+  },
+  {
+    id: 4,
+    name: "ZEE",
+    role: "BASS GUITAR",
+    description: "Non-binary bassist with cool presence and bass lines that anchor the chaos",
+    imageUrl: "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400",
+  },
+];
 
 export default function Band() {
-  const { data: bandMembers = [], isLoading } = useQuery<BandMember[]>({
-    queryKey: ["/api/band-members"],
-  });
-
-  if (isLoading) {
-    return (
-      <section id="band" className="py-20 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-black tracking-widest mb-4">
-              THE BAND
-            </h2>
-            <p className="text-muted-foreground text-lg">
-              Meet the anxious superheroes behind the music
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
-            {[...Array(4)].map((_, i) => (
-              <div key={i} className="text-center animate-pulse">
-                <div className="bg-muted rounded-full w-48 h-48 mx-auto mb-6" />
-                <div className="bg-muted h-6 rounded mb-2" />
-                <div className="bg-muted h-4 rounded mb-2 w-24 mx-auto" />
-                <div className="bg-muted h-16 rounded" />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    );
-  }
-
   return (
     <section id="band" className="py-20 bg-background">
       <div className="container mx-auto px-4">
@@ -56,51 +54,28 @@ export default function Band() {
           {bandMembers.map((member, index) => (
             <motion.div
               key={member.id}
-              initial={{ opacity: 0, y:# thoughts
-
-Looking at the design reference, I need to create a professional pop-punk band landing page for "Panickin' Skywalker" with a black/pink aesthetic. The design is a single-page React application with:
-
-1. Fixed header with navigation and social links
-2. Hero section with band photo and latest release spotlight
-3. Music releases showcase with streaming platform links
-4. Band members section with character profiles
-5. Tour dates section
-6. Contact and fan engagement section
-7. Footer with comprehensive links
-
-The color scheme uses black (#000000), pink (#FF1581), and white (#FFFFFF) with bold typography and high contrast design. I need to implement this using React, Tailwind CSS, and the existing shadcn components.
-
-Key features to implement:
-- Responsive design with mobile menu
-- Email signup functionality 
-- Smooth scrolling navigation
-- Header blur effect on scroll
-- Hover animations for album covers and band member cards
-- Streaming platform integration buttons
-- Tour date listings with ticket links
-
-I'll need to create the home page component, update the routing, and customize the CSS variables to match the punk aesthetic.
-
-# useful_guidelines_from_blueprints
-
-From the development guidelines:
-- Put as much of the app in the frontend as possible
-- Use wouter for routing and add pages to client/src/pages directory
-- Use shadcn's useForm hook and Form component for forms with zodResolver
-- Use @tanstack/react-query for data fetching
-- Add data-testid attributes to interactive elements
-- Use CSS variables in HSL format for custom colors
-- Keep mobile-first responsive design approach
-
-# directory_structure
-
-```json
-[
-    {"path": "client/src/index.css", "status": "overwritten"},
-    {"path": "tailwind.config.ts", "status": "overwritten"},
-    {"path": "client/src/pages/home.tsx", "status": "new"},
-    {"path": "client/src/App.tsx", "status": "overwritten"},
-    {"path": "shared/schema.ts", "status": "overwritten"},
-    {"path": "server/storage.ts", "status": "overwritten"},
-    {"path": "server/routes.ts", "status": "overwritten"}
-]
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              className="text-center group"
+              data-testid={`band-member-${member.id}`}
+            >
+              <div className="relative mb-6 mx-auto w-48 h-48 rounded-full overflow-hidden border-4 border-primary group-hover:border-accent transition-colors duration-300">
+                <img
+                  src={member.imageUrl}
+                  alt={member.name}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+              </div>
+              <h3 className="text-xl font-bold mb-2">{member.name}</h3>
+              <p className="text-primary font-semibold mb-2">{member.role}</p>
+              <p className="text-muted-foreground text-sm">{member.description}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}

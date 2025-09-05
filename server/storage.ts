@@ -47,6 +47,7 @@ export class MemStorage implements IStorage {
     const subscriber: NewsletterSubscriber = {
       ...insertSubscriber,
       id,
+      name: insertSubscriber.name || null,
       subscribedAt: new Date(),
     };
     this.newsletterSubscribers.set(id, subscriber);
