@@ -1385,7 +1385,6 @@ export default function Home() {
               <InstagramFeed maxPosts={6} showTikTokPotential={true} />
             </div>
             */}
-          */}
 
             {/* Discord Community - KEEPING THIS ACTIVE */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
