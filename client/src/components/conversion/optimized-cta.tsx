@@ -343,14 +343,58 @@ export function MusicStreamCTA({ platform, href, className }: {
   href: string;
   className?: string;
 }) {
+  const getPlatformConfig = () => {
+    switch (platform) {
+      case 'spotify':
+        return {
+          text: 'Spotify',
+          bgColor: 'bg-[#1DB954] hover:bg-[#1ed760]',
+          textColor: 'text-white',
+          icon: '♫'
+        };
+      case 'apple':
+        return {
+          text: 'Apple Music',
+          bgColor: 'bg-gradient-to-r from-[#fa233b] to-[#fb5c74] hover:from-[#fb5c74] hover:to-[#fa233b]',
+          textColor: 'text-white',
+          icon: '♫'
+        };
+      case 'youtube':
+        return {
+          text: 'YouTube',
+          bgColor: 'bg-[#FF0000] hover:bg-[#cc0000]',
+          textColor: 'text-white',
+          icon: '▶'
+        };
+      default:
+        return {
+          text: platform,
+          bgColor: 'bg-primary hover:bg-primary/90',
+          textColor: 'text-white',
+          icon: '♫'
+        };
+    }
+  };
+
+  const config = getPlatformConfig();
+
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (href) {
+      window.open(href, '_blank', 'noopener,noreferrer');
+    }
+  };
+
   return (
-    <OptimizedCTA 
-      type="music"
-      primary={false}
-      href={href}
-      customText={`STREAM ON ${platform.toUpperCase()}`}
-      className={className}
-      testId={`music-cta-${platform}`}
-    />
+    <motion.button
+      onClick={handleClick}
+      className={`${config.bgColor} ${config.textColor} px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-300 flex items-center gap-2 ${className}`}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+    >
+      <span className="text-sm">{config.icon}</span>
+      {config.text}
+      <ExternalLink className="h-4 w-4" />
+    </motion.button>
   );
 }
