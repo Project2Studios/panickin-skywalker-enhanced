@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap') layer(fonts);
 
 /* Performance critical styles */
-* {
+.hardware-accelerate {
   /* Enable hardware acceleration for better performance */
   transform: translate3d(0, 0, 0);
 }
