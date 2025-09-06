@@ -27,16 +27,6 @@ export default function Hero() {
 
       {/* Content */}
       <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="mb-6"
-        >
-          <span className="inline-block bg-primary text-primary-foreground px-4 py-2 rounded-full text-sm font-bold tracking-widest mb-4 glow-pink">
-            NEW SINGLE OUT NOW
-          </span>
-        </motion.div>
 
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
@@ -111,11 +101,23 @@ export default function Hero() {
           </Card>
         </motion.div>
 
+        {/* New Single Out Now Button */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 1.0 }}
+          className="mb-8 pr-4"
+        >
+          <span className="inline-block bg-primary text-primary-foreground px-4 py-2 rounded-full text-sm font-bold tracking-widest glow-pink">
+            NEW SINGLE OUT NOW
+          </span>
+        </motion.div>
+
         {/* Scroll Indicator */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
+          transition={{ duration: 0.8, delay: 1.2 }}
           className="animate-bounce cursor-pointer"
           onClick={scrollToMusic}
           data-testid="scroll-indicator"
