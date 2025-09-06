@@ -112,14 +112,6 @@ const newsUpdates = [
   },
 ];
 
-// Social Proof Data
-const socialProofStats = {
-  monthlyListeners: "847,293",
-  totalStreams: "12.4M",
-  fanCommunity: "156K",
-  concertsSoldOut: "23",
-  countries: "42",
-};
 
 // Fan Testimonials Data
 const fanTestimonials = [
@@ -923,43 +915,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Social Proof Stats Section */}
-      <section className="py-12 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-6 max-w-4xl mx-auto">
-            <SocialProofCounter 
-              icon={Users} 
-              label="Monthly Listeners" 
-              targetValue={socialProofStats.monthlyListeners}
-              delay={0}
-            />
-            <SocialProofCounter 
-              icon={Play} 
-              label="Total Streams" 
-              targetValue={socialProofStats.totalStreams}
-              delay={0.1}
-            />
-            <SocialProofCounter 
-              icon={Heart} 
-              label="Fan Community" 
-              targetValue={socialProofStats.fanCommunity}
-              delay={0.2}
-            />
-            <SocialProofCounter 
-              icon={Star} 
-              label="Sold Out Shows" 
-              targetValue={socialProofStats.concertsSoldOut}
-              delay={0.3}
-            />
-            <SocialProofCounter 
-              icon={Globe} 
-              label="Countries" 
-              targetValue={socialProofStats.countries}
-              delay={0.4}
-            />
-          </div>
-        </div>
-      </section>
 
       {/* Enhanced Music Section with Audio Previews and Visualizations */}
       <EnhancedMusicSection 
