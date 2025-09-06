@@ -1397,15 +1397,11 @@ export default function Home() {
                       Stay connected across all platforms for exclusive content, behind-the-scenes moments, and community events.
                     </p>
                     
-                    <div className="space-y-3 mb-6">
-                      <div className="flex gap-2">
-                        <SocialFollowCTA platform="tiktok" className="flex-1 text-xs" />
-                        <SocialFollowCTA platform="instagram" className="flex-1 text-xs" />
-                      </div>
-                      <div className="flex gap-2">
-                        <SocialFollowCTA platform="discord" className="flex-1 text-xs" />
-                        <SocialFollowCTA platform="youtube" className="flex-1 text-xs" />
-                      </div>
+                    <div className="space-y-2 mb-6">
+                      <SocialFollowCTA platform="tiktok" className="w-full" />
+                      <SocialFollowCTA platform="instagram" className="w-full" />
+                      <SocialFollowCTA platform="discord" className="w-full" />
+                      <SocialFollowCTA platform="youtube" className="w-full" />
                     </div>
 
                     <Button 
