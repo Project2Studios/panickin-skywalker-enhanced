@@ -844,6 +844,87 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Music Section */}
+      <section id="music" className="py-24 lg:py-32 bg-secondary/30">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <motion.h2 
+              className="text-section text-gradient mb-6"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              MUSIC
+            </motion.h2>
+            <motion.p 
+              className="text-muted-foreground text-xl font-medium tracking-wide max-w-2xl mx-auto"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true }}
+            >
+              Listen to our latest tracks and explore our musical journey
+            </motion.p>
+          </div>
+
+          <div className="max-w-4xl mx-auto">
+            {/* My Space Track */}
+            <motion.div 
+              className="bg-card border border-border rounded-lg p-6 mb-6"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              viewport={{ once: true }}
+            >
+              <div className="flex flex-col md:flex-row items-center gap-6">
+                <div className="flex-1 text-center md:text-left">
+                  <h3 className="text-2xl font-bold mb-2 text-gradient">My Space</h3>
+                  <p className="text-muted-foreground mb-4">
+                    A journey through the inner cosmos of anxiety and self-discovery
+                  </p>
+                  
+                  {/* Audio Player */}
+                  <audio 
+                    controls 
+                    className="w-full max-w-md mx-auto md:mx-0"
+                    preload="metadata"
+                  >
+                    <source src="/my-space.mp3" type="audio/mpeg" />
+                    Your browser does not support the audio element.
+                  </audio>
+                </div>
+                
+                {/* Track Info */}
+                <div className="text-center md:text-right">
+                  <div className="text-sm text-muted-foreground mb-2">Latest Release</div>
+                  <div className="text-primary font-semibold">2024</div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Additional tracks can be added here */}
+            <motion.div 
+              className="text-center mt-12"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+              viewport={{ once: true }}
+            >
+              <p className="text-muted-foreground mb-6">More tracks coming soon...</p>
+              <div className="flex flex-wrap justify-center gap-3">
+                <button className="bg-[#1DB954] hover:bg-[#1ed760] text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                  Follow on Spotify
+                </button>
+                <button className="bg-gradient-to-r from-[#fa233b] to-[#fb5c74] hover:from-[#fb5c74] hover:to-[#fa233b] text-white px-6 py-3 rounded-lg font-semibold transition-all">
+                  Listen on Apple Music
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* Dynamic News & Updates Section */}
       <section className="py-16 lg:py-20 bg-secondary/50">
         <div className="container mx-auto px-4">
