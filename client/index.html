@@ -2,15 +2,144 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Fira+Code:wght@300..700&family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400..700;1,400..700&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Outfit:wght@100..900&family=Oxanium:wght@200..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    
+    <!-- Performance & SEO Meta Tags -->
+    <title>Panickin' Skywalker - Official Band Website</title>
+    <meta name="description" content="Official website of Panickin' Skywalker - The anxious superheroes of pop-punk. Latest music, tour dates, and exclusive content." />
+    <meta name="keywords" content="Panickin Skywalker, punk rock, pop punk, band, music, tour dates, streaming, anxiety superhero" />
+    <meta name="author" content="Panickin' Skywalker" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Panickin' Skywalker - Official Band Website" />
+    <meta property="og:description" content="The anxious superheroes of pop-punk are back with their most electrifying release yet" />
+    <meta property="og:image" content="/og-image.jpg" />
+    <meta property="og:url" content="https://panickinskywalker.com" />
+    <meta property="og:site_name" content="Panickin' Skywalker" />
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Panickin' Skywalker - Official Band Website" />
+    <meta name="twitter:description" content="The anxious superheroes of pop-punk are back with their most electrifying release yet" />
+    <meta name="twitter:image" content="/twitter-image.jpg" />
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#ff1a6b" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Panickin' Skywalker" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    
+    <!-- Favicon and Icons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/icon-192x192.png" />
+    <link rel="mask-icon" href="/icon-monochrome.svg" color="#ff1a6b" />
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+    
+    <!-- Performance Optimizations -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    <link rel="dns-prefetch" href="https://images.unsplash.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Optimized Font Loading - Only load Inter which is actually used -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" as="image" importance="high" />
+    
+    <!-- Performance hints -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="format-detection" content="telephone=no" />
+    
+    <!-- Critical CSS inline (for above-the-fold content) -->
+    <style>
+      /* Critical CSS for immediate rendering */
+      body {
+        margin: 0;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        background-color: #000;
+        color: #fff;
+        overflow-x: hidden;
+      }
+      
+      #root {
+        min-height: 100vh;
+      }
+      
+      /* Loading spinner */
+      .loading-spinner {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        background-color: #000;
+      }
+      
+      .loading-spinner::after {
+        content: '';
+        width: 40px;
+        height: 40px;
+        border: 2px solid #333;
+        border-top: 2px solid #ff1a6b;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      
+      /* Hide loading spinner when React app loads */
+      #root:not(:empty) + .loading-spinner {
+        display: none;
+      }
+    </style>
   </head>
   <body>
+    <!-- App container -->
     <div id="root"></div>
+    
+    <!-- Loading fallback -->
+    <div class="loading-spinner" id="loading-fallback"></div>
+    
+    <!-- Main application script -->
     <script type="module" src="/src/main.tsx"></script>
-    <!-- This is a replit script which adds a banner on the top of the page when opened in development mode outside the replit environment -->
+    
+    <!-- Performance optimization: Remove loading fallback after app loads -->
+    <script>
+      // Remove loading spinner when React loads
+      const checkAppLoaded = () => {
+        const root = document.getElementById('root');
+        const spinner = document.getElementById('loading-fallback');
+        if (root && root.children.length > 0 && spinner) {
+          spinner.style.display = 'none';
+        }
+      };
+      
+      // Check periodically for app load
+      const interval = setInterval(() => {
+        checkAppLoaded();
+        if (document.getElementById('root').children.length > 0) {
+          clearInterval(interval);
+        }
+      }, 100);
+      
+      // Fallback: hide spinner after 5 seconds regardless
+      setTimeout(() => {
+        const spinner = document.getElementById('loading-fallback');
+        if (spinner) spinner.style.display = 'none';
+        clearInterval(interval);
+      }, 5000);
+    </script>
+    
+    <!-- Development banner (only in development) -->
     <script type="text/javascript" src="https://replit.com/public/js/replit-dev-banner.js"></script>
   </body>
 </html>

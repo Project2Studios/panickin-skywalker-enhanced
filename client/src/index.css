@@ -1,4 +1,38 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+/* Optimized font loading */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap') layer(fonts);
+
+/* Performance critical styles */
+* {
+  /* Enable hardware acceleration for better performance */
+  transform: translate3d(0, 0, 0);
+}
+
+/* Optimize image rendering */
+img {
+  content-visibility: auto;
+  contain-intrinsic-size: 200px 200px;
+}
+
+/* Reduce paint complexity */
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+.will-change-scroll {
+  will-change: scroll-position;
+}
+
+/* Performance-optimized animations */
+.animate-optimized {
+  animation-fill-mode: both;
+  animation-play-state: running;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -20,6 +54,8 @@
   --accent-foreground: hsl(0 0% 100%);
   --destructive: hsl(0 84% 60%);
   --destructive-foreground: hsl(0 0% 100%);
+  --warning: hsl(38 92% 50%);
+  --warning-foreground: hsl(0 0% 0%);
   --border: hsl(0 0% 20%);
   --input: hsl(0 0% 10%);
   --ring: hsl(330 100% 55%);
@@ -69,6 +105,8 @@
   --accent-foreground: hsl(0 0% 100%);
   --destructive: hsl(0 84% 60%);
   --destructive-foreground: hsl(0 0% 100%);
+  --warning: hsl(38 92% 50%);
+  --warning-foreground: hsl(0 0% 0%);
   --border: hsl(0 0% 20%);
   --input: hsl(0 0% 10%);
   --ring: hsl(330 100% 55%);
@@ -99,14 +137,88 @@
   html {
     scroll-behavior: smooth;
   }
+  
+  /* Focus styles for better accessibility */
+  button:focus-visible,
+  [role="button"]:focus-visible {
+    outline: 2px solid hsl(330 100% 55%);
+    outline-offset: 2px;
+  }
 }
 
 @layer components {
+  /* Enhanced Typography System */
+  .text-display {
+    font-size: clamp(2.5rem, 8vw, 8rem);
+    font-weight: 900;
+    line-height: 0.9;
+  }
+  
+  .text-hero {
+    font-size: clamp(2rem, 6vw, 6rem);
+    font-weight: 900;
+    line-height: 0.9;
+  }
+  
+  .text-section {
+    font-size: clamp(1.5rem, 4vw, 4rem);
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    line-height: 1.1;
+  }
+  
+  .text-punk-bold {
+    @apply font-black tracking-[0.2em] uppercase;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  }
+  
+  /* Static Gradient */
   .text-gradient {
     background: linear-gradient(135deg, hsl(330 100% 55%) 0%, hsl(0 0% 100%) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+  }
+  
+  /* Animated Gradient */
+  .text-gradient-animated {
+    background: linear-gradient(
+      45deg, 
+      hsl(330 100% 55%) 0%, 
+      hsl(0 0% 100%) 25%, 
+      hsl(270 100% 70%) 50%, 
+      hsl(0 0% 100%) 75%, 
+      hsl(330 100% 55%) 100%
+    );
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 8s ease-in-out infinite;
+  }
+  
+  /* Hover Effect for Band Members */
+  .text-member-hover {
+    @apply transition-all duration-300 cursor-pointer;
+    background: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(330 100% 55%) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    background-size: 200% 200%;
+    background-position: 100% 0;
+  }
+  
+  .text-member-hover:hover {
+    background-position: 0 100%;
+    transform: scale(1.05);
+    text-shadow: 0 0 20px hsla(330, 100%, 55%, 0.5);
+  }
+  
+  /* Role Title Enhancement */
+  .role-badge {
+    @apply inline-block px-4 py-2 rounded-full font-bold text-sm tracking-widest;
+    background: linear-gradient(135deg, hsl(330 100% 55%), hsl(270 100% 70%));
+    box-shadow: 0 4px 15px hsla(330, 100%, 55%, 0.3);
   }
   
   .glow-pink {
@@ -116,5 +228,824 @@
   .header-blur {
     backdrop-filter: blur(10px);
     background: hsla(0, 0%, 0%, 0.8);
+    border-bottom: 1px solid hsla(330, 100%, 55%, 0.1);
+  }
+  
+  /* Enhanced scroll progress bar with subtle animation */
+  .scroll-progress {
+    background: linear-gradient(90deg, hsl(330 100% 55%) 0%, hsl(330 100% 65%) 100%);
+    box-shadow: 0 0 10px hsla(330, 100%, 55%, 0.3);
+  }
+  
+  /* Back to top button hover animation */
+  .back-to-top-btn {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .back-to-top-btn:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 25px hsla(330, 100%, 55%, 0.3), 0 0 20px hsla(330, 100%, 55%, 0.2);
+  }
+  
+  /* Active navigation indicator */
+  .nav-indicator {
+    background: linear-gradient(90deg, transparent, hsl(330 100% 55%), transparent);
+  }
+  
+  /* Mobile menu stagger animation support */
+  .mobile-menu-item {
+    transform-origin: center;
+  }
+  
+  /* Punk Button Effects */
+  .punk-button {
+    position: relative;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .punk-button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    opacity: 0;
+    transform: translateX(-100%);
+    transition: all 0.6s;
+  }
+  
+  .punk-button:hover::before {
+    opacity: 1;
+    transform: translateX(100%);
+  }
+  
+  .punk-button-enhanced {
+    background-size: 200% 200%;
+    animation: punkGradientShift 3s ease infinite;
+    box-shadow: 0 4px 15px rgba(255, 26, 107, 0.4), 0 0 20px rgba(255, 26, 107, 0.1);
+  }
+  
+  .punk-button-enhanced:hover {
+    animation-duration: 1s;
+    box-shadow: 0 6px 20px rgba(255, 26, 107, 0.6), 0 0 30px rgba(255, 26, 107, 0.2);
+    transform: translateY(-2px);
+  }
+  
+  .punk-streaming-button {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background-size: 200% 200%;
+    background-position: 0% 50%;
+  }
+  
+  .punk-streaming-button:hover {
+    background-position: 100% 50%;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    transform: translateY(-3px) scale(1.05);
+  }
+  
+  .punk-streaming-button:active {
+    transform: translateY(-1px) scale(1.02);
+  }
+  
+  .punk-ticket-button {
+    background: linear-gradient(135deg, hsl(330 100% 55%) 0%, hsl(270 100% 70%) 100%);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .punk-ticket-button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: left 0.5s;
+  }
+  
+  .punk-ticket-button:hover::after {
+    left: 100%;
+  }
+  
+  .punk-ticket-button:hover {
+    background: linear-gradient(135deg, hsl(270 100% 70%) 0%, hsl(330 100% 55%) 100%);
+    box-shadow: 0 8px 25px rgba(255, 26, 107, 0.4);
+    transform: translateY(-2px);
+  }
+  
+  /* Punk Effect Animations */
+  .punk-glow-effect:hover {
+    box-shadow: 0 0 20px hsl(330 100% 55%), 0 0 40px hsl(330 100% 55%), 0 0 60px hsl(330 100% 55%);
+    text-shadow: 0 0 10px rgba(255, 26, 107, 0.8);
+  }
+  
+  .punk-pulse-effect {
+    animation: punkPulse 2s infinite;
+  }
+  
+  .punk-shake-effect:hover {
+    animation: punkShake 0.6s;
+  }
+  
+  .punk-bounce-effect:hover {
+    animation: punkBounce 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+  
+  .punk-shimmer {
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transform: translateX(-100%);
+    animation: shimmer 2s infinite;
+  }
+  
+  /* Loading State Enhancements */
+  .loading-dots::after {
+    content: '.';
+    animation: loadingDots 1.5s infinite;
+  }
+  
+  /* Success/Error States */
+  .button-success {
+    background: linear-gradient(135deg, #10b981, #059669);
+    animation: successPulse 0.6s ease;
+  }
+  
+  .button-error {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    animation: errorShake 0.6s ease;
+  }
+  
+  /* Social Button Enhancements */
+  .social-button {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .social-button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+  }
+  
+  .social-button:hover::before {
+    width: 300px;
+    height: 300px;
+  }
+
+  /* News Update Cards */
+  .news-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .news-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 26, 107, 0.1), transparent);
+    transition: left 0.6s;
+  }
+
+  .news-card:hover::before {
+    left: 100%;
+  }
+
+  /* Social Proof Stat Cards */
+  .stat-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(255, 26, 107, 0.15);
+  }
+
+  /* Testimonial Cards */
+  .testimonial-card {
+    backdrop-filter: blur(20px);
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 26, 107, 0.1);
+  }
+
+  /* Modal Enhancements */
+  .member-modal {
+    backdrop-filter: blur(20px);
+    background: rgba(0, 0, 0, 0.9);
+  }
+
+  /* Enhanced Newsletter Section */
+  .newsletter-enhanced {
+    background: linear-gradient(135deg, 
+      rgba(0, 0, 0, 0.95) 0%, 
+      rgba(51, 0, 51, 0.1) 50%, 
+      rgba(0, 0, 0, 0.95) 100%);
+    border: 1px solid rgba(255, 26, 107, 0.2);
+  }
+
+  /* Fan Community Stats */
+  .fan-stat-glow {
+    box-shadow: 0 0 20px rgba(255, 26, 107, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  .fan-stat-glow:hover {
+    box-shadow: 0 0 30px rgba(255, 26, 107, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  }
+
+  /* Hot Badge Animation */
+  .hot-badge {
+    background: linear-gradient(45deg, #ff1a6b, #ff4d8f);
+    animation: hotPulse 2s infinite;
+  }
+
+  /* Verified Badge */
+  .verified-badge {
+    background: linear-gradient(135deg, #10b981, #059669);
+    animation: verifiedGlow 3s infinite;
+  }
+
+  /* Interactive Hover Effects */
+  .interactive-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .interactive-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  }
+}
+
+/* Keyframes for animated effects */
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 20px hsla(330, 100%, 55%, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 30px hsla(330, 100%, 55%, 0.8), 0 0 40px hsla(270, 100%, 70%, 0.3);
+  }
+}
+
+@keyframes textGlow {
+  0%, 100% {
+    text-shadow: 0 0 10px hsla(330, 100%, 55%, 0.5);
+  }
+  50% {
+    text-shadow: 0 0 20px hsla(330, 100%, 55%, 0.8), 0 0 30px hsla(270, 100%, 70%, 0.3);
+  }
+}
+
+/* Punk Button Keyframes */
+@keyframes punkGradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes punkPulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 26, 107, 0.4);
+  }
+  70% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(255, 26, 107, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 26, 107, 0);
+  }
+}
+
+@keyframes punkShake {
+  0%, 100% { transform: translateX(0); }
+  10% { transform: translateX(-2px) rotate(-1deg); }
+  20% { transform: translateX(2px) rotate(1deg); }
+  30% { transform: translateX(-2px) rotate(-1deg); }
+  40% { transform: translateX(2px) rotate(1deg); }
+  50% { transform: translateX(-1px) rotate(-0.5deg); }
+  60% { transform: translateX(1px) rotate(0.5deg); }
+  70% { transform: translateX(-1px) rotate(-0.5deg); }
+  80% { transform: translateX(1px) rotate(0.5deg); }
+  90% { transform: translateX(-1px) rotate(0); }
+}
+
+@keyframes punkBounce {
+  0% { transform: scale(1) rotate(0deg); }
+  25% { transform: scale(1.1) rotate(1deg); }
+  50% { transform: scale(1.05) rotate(-0.5deg); }
+  75% { transform: scale(1.08) rotate(0.5deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translate3d(-100%, 0, 0);
+  }
+  100% {
+    transform: translate3d(100%, 0, 0);
+  }
+}
+
+/* Optimized shimmer for lazy loading */
+@keyframes shimmerOptimized {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.animate-shimmer-optimized {
+  animation: shimmerOptimized 2s infinite linear;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  background-size: 200px 100%;
+}
+
+@keyframes loadingDots {
+  0% { content: '.'; }
+  33% { content: '..'; }
+  66% { content: '...'; }
+  100% { content: '.'; }
+}
+
+@keyframes successPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes errorShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+@keyframes hotPulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 26, 107, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(255, 26, 107, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 26, 107, 0);
+  }
+}
+
+@keyframes verifiedGlow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(16, 185, 129, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.6);
+  }
+}
+
+/* Mobile Touch Feedback Animations */
+@keyframes rippleEffect {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+@keyframes touchBounce {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes touchPulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 26, 107, 0.7);
+  }
+  70% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(255, 26, 107, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 26, 107, 0);
+  }
+}
+
+@keyframes mobileGlow {
+  0% {
+    box-shadow: 0 0 5px rgba(255, 26, 107, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 26, 107, 0.6);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(255, 26, 107, 0.3);
+  }
+}
+
+@keyframes countUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Enhanced utility classes */
+.animate-pulse-glow {
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+
+.animate-text-glow {
+  animation: textGlow 4s ease-in-out infinite;
+}
+
+.animate-punk-pulse {
+  animation: punkPulse 2s infinite;
+}
+
+.animate-punk-glow {
+  animation: punkPulse 2s infinite;
+}
+
+/* Responsive Button Adjustments */
+@media (max-width: 768px) {
+  .punk-streaming-button:hover {
+    transform: none;
+    background-position: 0% 50%;
+  }
+  
+  .punk-button-enhanced:hover {
+    transform: none;
+  }
+  
+  .punk-ticket-button:hover {
+    transform: none;
+  }
+}
+
+/* High contrast mode adjustments */
+@media (prefers-contrast: high) {
+  .punk-button {
+    border: 2px solid currentColor;
+  }
+  
+  .punk-glow-effect:hover {
+    box-shadow: none;
+    border: 3px solid hsl(330 100% 55%);
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .punk-button,
+  .punk-streaming-button,
+  .punk-ticket-button {
+    transition: none;
+  }
+  
+  .punk-pulse-effect,
+  .punk-glow-effect,
+  .punk-bounce-effect,
+  .punk-shake-effect {
+    animation: none;
+  }
+  
+  .punk-shimmer {
+    animation: none;
+  }
+}
+
+/* Performance optimizations */
+@layer performance {
+  /* Contain layout thrashing */
+  .contain-layout {
+    contain: layout;
+  }
+  
+  .contain-size {
+    contain: size;
+  }
+  
+  .contain-paint {
+    contain: paint;
+  }
+  
+  /* Optimize scrolling performance */
+  .scroll-optimized {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+  
+  /* Lazy loading support */
+  .lazy-container {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 400px;
+  }
+  
+  /* Optimized transitions */
+  .transition-optimized {
+    transition-property: transform, opacity;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  /* Image optimization */
+  .img-optimized {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+  
+  /* Text rendering optimization */
+  .text-optimized {
+    text-rendering: optimizeSpeed;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* GPU acceleration helpers */
+  .gpu-accelerated {
+    transform: translateZ(0);
+    will-change: transform;
+  }
+  
+  .gpu-accelerated-opacity {
+    will-change: opacity;
+  }
+  
+  /* Critical rendering path optimization */
+  .critical-resource {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 200px;
+  }
+}
+
+/* Mobile-First Touch Enhancements */
+@layer mobile {
+  /* Touch Target Optimization */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Enhanced Mobile Button Base */
+  .mobile-button-enhanced {
+    @apply touch-target;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: center;
+    will-change: transform;
+  }
+  
+  .mobile-button-enhanced:active {
+    transform: scale(0.96);
+  }
+  
+  /* Mobile Social Icons */
+  .mobile-social-icon {
+    @apply touch-target;
+    padding: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .mobile-social-icon:active {
+    transform: scale(0.9);
+    background: rgba(255, 26, 107, 0.2);
+  }
+  
+  /* Mobile Menu Button Enhancement */
+  .mobile-menu-button {
+    @apply touch-target;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .mobile-menu-button:active {
+    transform: scale(0.92);
+    background: rgba(255, 26, 107, 0.1);
+  }
+  
+  /* Touch Ripple Container */
+  .touch-ripple-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: inherit;
+  }
+  
+  /* Enhanced Mobile Cards */
+  .mobile-card-enhanced {
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+  }
+  
+  .mobile-card-enhanced:active {
+    transform: scale(0.98);
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Swipe Indicators */
+  .swipe-indicator {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 10;
+  }
+  
+  .swipe-indicator.left {
+    left: 20px;
+  }
+  
+  .swipe-indicator.right {
+    right: 20px;
+  }
+  
+  .swipe-indicator.visible {
+    opacity: 0.7;
+  }
+  
+  /* Mobile Typography Enhancements */
+  .mobile-text-enhanced {
+    font-size: clamp(0.875rem, 2.5vw, 1rem);
+    line-height: 1.5;
+    touch-action: manipulation;
+  }
+  
+  /* Thumb Zone Optimization */
+  .thumb-zone {
+    position: relative;
+  }
+  
+  .thumb-zone::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border-radius: inherit;
+    background: transparent;
+  }
+  
+  /* Mobile Modal Enhancements */
+  .mobile-modal {
+    border-radius: 20px 20px 0 0;
+    max-height: 90vh;
+    touch-action: pan-y;
+  }
+  
+  /* Pull to refresh indicator */
+  .pull-refresh-indicator {
+    position: absolute;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 26, 107, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+  }
+  
+  .pull-refresh-indicator.active {
+    opacity: 1;
+    background: rgba(255, 26, 107, 0.2);
+    animation: touchPulse 1.5s infinite;
+  }
+}
+
+/* Mobile-specific breakpoint optimizations */
+@media (max-width: 640px) {
+  .touch-target {
+    min-height: 48px;
+    min-width: 48px;
+  }
+  
+  .mobile-social-icon {
+    padding: 14px;
+  }
+  
+  .mobile-menu-button {
+    padding: 14px;
+  }
+}
+
+/* iPhone notch and safe area optimization */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .safe-area-header {
+    padding-top: max(1rem, env(safe-area-inset-top));
+  }
+  
+  .safe-area-footer {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+}
+
+/* High refresh rate display optimization */
+@media (min-resolution: 120dpi) {
+  .mobile-button-enhanced,
+  .mobile-social-icon,
+  .mobile-menu-button {
+    transition-duration: 0.1s;
   }
 }

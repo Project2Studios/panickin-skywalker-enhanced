@@ -41,6 +41,10 @@ export default {
           DEFAULT: "var(--destructive)",
           foreground: "var(--destructive-foreground)",
         },
+        warning: {
+          DEFAULT: "var(--warning)",
+          foreground: "var(--warning-foreground)",
+        },
         border: "var(--border)",
         input: "var(--input)",
         ring: "var(--ring)",
@@ -66,6 +70,15 @@ export default {
         sans: ["var(--font-sans)"],
         serif: ["var(--font-serif)"],
         mono: ["var(--font-mono)"],
+      },
+      fontSize: {
+        'display': ['clamp(4rem, 8vw, 10rem)', { lineHeight: '0.9', letterSpacing: '0.02em' }],
+        'hero': ['clamp(3rem, 6vw, 8rem)', { lineHeight: '0.9', letterSpacing: '0.02em' }],
+        'section': ['clamp(2.5rem, 5vw, 6rem)', { lineHeight: '1.1', letterSpacing: '0.05em' }],
+      },
+      letterSpacing: {
+        'ultra-wide': '0.2em',
+        'mega-wide': '0.3em',
       },
       keyframes: {
         "accordion-down": {
