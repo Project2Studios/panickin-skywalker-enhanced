@@ -257,16 +257,16 @@ const bandMembers = [
     }
   },
   {
-    name: "ZEE",
-    role: "BASS GUITAR",
-    description: "Non-binary bassist with cool presence and bass lines that anchor the chaos",
-    imageUrl: "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400",
-    fullBio: "Zee brings the groove that keeps everything together. With a background in jazz fusion, they add sophisticated basslines that give the band its unique edge. As the band's moral compass and voice of reason, Zee helps navigate the music industry while staying true to their punk roots and advocating for LGBTQ+ representation in music.",
-    influences: ["Flea", "Kim Deal", "Mike Dirnt"],
-    funFact: "Can solve a Rubik's cube in under 60 seconds between songs",
+    name: "DAN SPINNEY",
+    role: "DRUMS",
+    description: "Drummer with explosive energy and rhythms that drive the band's chaotic sound",
+    imageUrl: "/dans.png",
+    fullBio: "Dan Spinney brings the groove that keeps everything together. With a background in jazz fusion, he adds sophisticated rhythms that give the band its unique edge. As the band's moral compass and voice of reason, Dan helps navigate the music industry while staying true to their punk roots and maintaining the band's explosive energy.",
+    influences: ["Travis Barker", "Dave Grohl", "Josh Dun"],
+    funFact: "Can play drum solos with his eyes closed while crowd-surfing",
     social: {
-      instagram: "@zee_basslines",
-      twitter: "@ZeeGrooves"
+      instagram: "@danspinney_drums",
+      twitter: "@DanSpinneyBeats"
     }
   },
 ];
