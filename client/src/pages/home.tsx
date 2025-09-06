@@ -769,7 +769,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/60" />
         </div>
         
-        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
+        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto pt-24 md:pt-32">
           
           <motion.h1 
             className="text-display text-gradient-animated mb-8 animate-text-glow"
@@ -827,7 +827,7 @@ export default function Home() {
           </motion.div>
           
           {/* New Single Out Now Button */}
-          <motion.div
+          {/* <motion.div
             className="mb-8 pr-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -836,7 +836,7 @@ export default function Home() {
             <span className="inline-block bg-primary text-primary-foreground px-4 py-2 rounded-full text-sm font-bold tracking-widest glow-pink">
               NEW SINGLE OUT NOW
             </span>
-          </motion.div>
+          </motion.div> */}
           
           <div className="animate-bounce">
             <ChevronDown className="text-primary text-2xl mx-auto" />
@@ -1143,7 +1143,8 @@ export default function Home() {
       </section>
 
       {/* Interactive Tour Map Section */}
-      <section id="tour" className="py-24 lg:py-32 bg-secondary">
+      {/* TOUR SECTION TEMPORARILY COMMENTED OUT */}
+      {/* <section id="tour" className="py-24 lg:py-32 bg-secondary">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <motion.h2 
@@ -1173,7 +1174,6 @@ export default function Home() {
           />
           
           <div className="text-center mt-12">
-            {/* Ticket Scarcity Indicator */}
             <div className="mb-6">
               <TicketScarcity 
                 remaining={urgencyData.tickets.remaining} 
@@ -1193,7 +1193,6 @@ export default function Home() {
               testId="tour-ticket-cta"
             />
             
-            {/* Newsletter CTA for tour alerts */}
             <div className="mt-4">
               <OptimizedCTA
                 type="newsletter"
@@ -1205,7 +1204,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Fan Testimonials Section */}
       <section className="py-20 lg:py-24 bg-secondary/30">
