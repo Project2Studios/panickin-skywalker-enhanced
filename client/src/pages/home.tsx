@@ -244,16 +244,16 @@ const bandMembers = [
     }
   },
   {
-    name: "JAX",
+    name: "JAMES BLONDE",
     role: "LEAD GUITAR",
     description: "Lead guitarist with pure punk aesthetic and solos that cut through the noise",
-    imageUrl: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400",
-    fullBio: "Jax learned guitar by playing along to punk rock albums in their garage at 3am. A minimalist who believes in maximum impact, Jax crafts solos that hit like emotional lightning bolts. Despite their quiet demeanor offstage, Jax transforms into a powerhouse during performances, channeling years of social anxiety into pure sonic energy.",
+    imageUrl: "/jamesb.png",
+    fullBio: "James Blonde learned guitar by playing along to punk rock albums in their garage at 3am. A minimalist who believes in maximum impact, James crafts solos that hit like emotional lightning bolts. Despite their quiet demeanor offstage, James transforms into a powerhouse during performances, channeling years of social anxiety into pure sonic energy.",
     influences: ["Minor Threat", "Black Flag", "Bad Brains"],
     funFact: "Has a collection of 47 vintage guitar picks from legendary punk shows",
     social: {
-      instagram: "@jax_shreds",
-      youtube: "@JaxGuitarLessons"
+      instagram: "@jamesblonde_guitar",
+      youtube: "@JamesBlondeShreds"
     }
   },
   {
