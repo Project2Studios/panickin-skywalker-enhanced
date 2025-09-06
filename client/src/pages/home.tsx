@@ -221,7 +221,7 @@ const bandMembers = [
     name: "ALEX SKYWALKER",
     role: "LEAD VOCALS",
     description: "The anxious superhero with a voice that channels millennial angst into anthemic choruses",
-    imageUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400",
+    imageUrl: "/skywalker.png",
     fullBio: "Alex discovered music as a way to cope with anxiety at age 16. Growing up feeling like an outsider, they found solace in punk rock's raw honesty. After years of bedroom recordings and coffee shop open mics, Alex formed Panickin' Skywalker to create a safe space for fellow anxious souls. When not performing, Alex volunteers at mental health advocacy events and collects vintage superhero comics.",
     influences: ["Green Day", "My Chemical Romance", "Paramore"],
     funFact: "Has watched every superhero movie ever made (twice)",
@@ -1328,8 +1328,10 @@ export default function Home() {
       </section>
 
       {/* Social & Community Hub Section */}
+      {/* TODO: Clean up and re-enable the full social hub section later. Currently showing only Discord community. */}
       <section id="social" className="py-24 lg:py-32 bg-background">
         <div className="container mx-auto px-4">
+          {/* COMMENTED OUT: Full social hub header and other sections
           <div className="text-center mb-20">
             <motion.h2 
               className="text-section text-gradient mb-6"
@@ -1352,7 +1354,8 @@ export default function Home() {
           </div>
           
           <div className="space-y-16">
-            {/* Viral Moments Tracker */}
+            {/* COMMENTED OUT: Viral Moments Tracker */}
+            {/*
             <div>
               <div className="text-center mb-12">
                 <h3 className="text-2xl font-bold mb-4 flex items-center justify-center gap-2">
@@ -1365,8 +1368,10 @@ export default function Home() {
               </div>
               <ViralMomentsTracker maxMoments={2} showMetrics={false} />
             </div>
+            */}
 
-            {/* Instagram Feed */}
+            {/* COMMENTED OUT: Instagram Feed */}
+            {/*
             <div>
               <div className="text-center mb-12">
                 <h3 className="text-2xl font-bold mb-4 flex items-center justify-center gap-2">
@@ -1379,8 +1384,10 @@ export default function Home() {
               </div>
               <InstagramFeed maxPosts={6} showTikTokPotential={true} />
             </div>
+            */}
+          */}
 
-            {/* Discord Community */}
+            {/* Discord Community - KEEPING THIS ACTIVE */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               <div className="lg:col-span-2">
                 <div className="text-center mb-8">
@@ -1422,7 +1429,7 @@ export default function Home() {
                 </Card>
               </div>
             </div>
-          </div>
+          {/* </div> - Closing the commented out space-y-16 div */}
         </div>
       </section>
 
