@@ -1391,28 +1391,30 @@ export default function Home() {
               {/* Social Call-to-Action */}
               <div className="lg:col-span-1 flex flex-col justify-center">
                 <Card className="bg-gradient-to-r from-pink-500/10 to-purple-500/10 border-pink-200/20">
-                  <CardContent className="p-8 text-center">
+                  <CardContent className="p-6 text-center">
                     <h4 className="text-xl font-bold mb-4">Follow Us Everywhere</h4>
-                    <p className="text-muted-foreground mb-6">
+                    <p className="text-muted-foreground mb-6 text-sm">
                       Stay connected across all platforms for exclusive content, behind-the-scenes moments, and community events.
                     </p>
                     
-                    <div className="grid grid-cols-2 gap-3 mb-6">
-                      <SocialFollowCTA platform="tiktok" className="" />
-                      <SocialFollowCTA platform="instagram" className="" />
-                      <SocialFollowCTA platform="discord" className="" />
-                      <SocialFollowCTA platform="youtube" className="" />
+                    <div className="space-y-3 mb-6">
+                      <div className="flex gap-2">
+                        <SocialFollowCTA platform="tiktok" className="flex-1 text-xs" />
+                        <SocialFollowCTA platform="instagram" className="flex-1 text-xs" />
+                      </div>
+                      <div className="flex gap-2">
+                        <SocialFollowCTA platform="discord" className="flex-1 text-xs" />
+                        <SocialFollowCTA platform="youtube" className="flex-1 text-xs" />
+                      </div>
                     </div>
 
-                    <div className="text-center">
-                      <Button 
-                        className="w-full"
-                        onClick={() => window.location.href = '/social'}
-                      >
-                        <Share2 className="mr-2 h-4 w-4" />
-                        Explore Full Social Hub
-                      </Button>
-                    </div>
+                    <Button 
+                      className="w-full bg-pink-500 hover:bg-pink-600 text-white"
+                      onClick={() => window.location.href = '/social'}
+                    >
+                      <Share2 className="mr-2 h-4 w-4" />
+                      Explore Full Social Hub
+                    </Button>
                   </CardContent>
                 </Card>
               </div>
