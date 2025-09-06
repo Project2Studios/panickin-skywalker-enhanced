@@ -68,8 +68,12 @@ export default function Header() {
       <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-            <span className="text-primary-foreground font-bold text-sm">PS</span>
+          <div className="w-8 h-8 flex items-center justify-center">
+            <img 
+              src="/ps-logo.png" 
+              alt="Panickin' Skywalker Logo" 
+              className="w-8 h-8 object-contain"
+            />
           </div>
           <span className="text-xl font-bold tracking-wider">PANICKIN' SKYWALKER</span>
         </div>

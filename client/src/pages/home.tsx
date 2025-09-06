@@ -770,11 +770,6 @@ export default function Home() {
         </div>
         
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
-          <div className="mb-6">
-            <span className="inline-block bg-primary text-primary-foreground px-4 py-2 rounded-full text-sm font-bold tracking-widest mb-4 glow-pink">
-              NEW SINGLE OUT NOW
-            </span>
-          </div>
           
           <motion.h1 
             className="text-display text-gradient-animated mb-8 animate-text-glow"
@@ -829,6 +824,18 @@ export default function Home() {
               </div>
             </CardContent>
           </Card>
+          </motion.div>
+          
+          {/* New Single Out Now Button */}
+          <motion.div
+            className="mb-8 pr-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.8 }}
+          >
+            <span className="inline-block bg-primary text-primary-foreground px-4 py-2 rounded-full text-sm font-bold tracking-widest glow-pink">
+              NEW SINGLE OUT NOW
+            </span>
           </motion.div>
           
           <div className="animate-bounce">
