@@ -313,7 +313,3 @@ function AlbumCard({
     </motion.div>
   );
 }
-      </div>
-    </section>
-  );
-}

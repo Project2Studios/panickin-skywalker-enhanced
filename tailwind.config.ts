@@ -65,6 +65,39 @@ export default {
           border: "var(--sidebar-border)",
           ring: "var(--sidebar-ring)",
         },
+        // Extended Band Color Palette
+        'superhero-blue': {
+          DEFAULT: "var(--superhero-blue)",
+          foreground: "var(--superhero-blue-foreground)",
+        },
+        'anxiety-purple': {
+          DEFAULT: "var(--anxiety-purple)",
+          foreground: "var(--anxiety-purple-foreground)",
+        },
+        'panic-red': {
+          DEFAULT: "var(--panic-red)",
+          foreground: "var(--panic-red-foreground)",
+        },
+        'calm-green': {
+          DEFAULT: "var(--calm-green)",
+          foreground: "var(--calm-green-foreground)",
+        },
+        'energy-orange': {
+          DEFAULT: "var(--energy-orange)",
+          foreground: "var(--energy-orange-foreground)",
+        },
+        'store-accent': {
+          DEFAULT: "var(--store-accent)",
+          foreground: "var(--store-accent-foreground)",
+        },
+        'limited-edition': {
+          DEFAULT: "var(--limited-edition)",
+          foreground: "var(--limited-edition-foreground)",
+        },
+        'tour-exclusive': {
+          DEFAULT: "var(--tour-exclusive)",
+          foreground: "var(--tour-exclusive-foreground)",
+        },
       },
       fontFamily: {
         sans: ["var(--font-sans)"],
@@ -107,11 +140,53 @@ export default {
             animationTimingFunction: "cubic-bezier(0, 0, 0.2, 1)",
           },
         },
+        // Band-specific animations
+        'limited-pulse': {
+          "0%, 100%": {
+            transform: "scale(1)",
+            boxShadow: "0 4px 15px hsla(45, 100%, 60%, 0.4)",
+          },
+          "50%": {
+            transform: "scale(1.05)",
+            boxShadow: "0 6px 25px hsla(45, 100%, 60%, 0.6)",
+          },
+        },
+        'product-shimmer': {
+          "0%": { transform: "translateX(-100%)" },
+          "100%": { transform: "translateX(100%)" },
+        },
+        'category-hover': {
+          "0%": { transform: "translateY(0) rotate(0deg)" },
+          "25%": { transform: "translateY(-4px) rotate(1deg)" },
+          "75%": { transform: "translateY(-2px) rotate(-0.5deg)" },
+          "100%": { transform: "translateY(0) rotate(0deg)" },
+        },
+        'add-to-cart-success': {
+          "0%": { transform: "scale(1)" },
+          "50%": { 
+            transform: "scale(1.1)",
+            background: "linear-gradient(135deg, hsl(140 60% 55%), hsl(330 100% 55%))",
+          },
+          "100%": { transform: "scale(1)" },
+        },
+        'wishlist-heart': {
+          "0%": { transform: "scale(1)" },
+          "25%": { transform: "scale(1.2) rotate(5deg)" },
+          "50%": { transform: "scale(1.1) rotate(-3deg)" },
+          "75%": { transform: "scale(1.15) rotate(2deg)" },
+          "100%": { transform: "scale(1) rotate(0deg)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         bounce: "bounce 1s infinite",
+        // Band-specific animations
+        'limited-pulse': 'limited-pulse 2s infinite',
+        'product-shimmer': 'product-shimmer 2s infinite linear',
+        'category-hover': 'category-hover 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+        'add-to-cart-success': 'add-to-cart-success 0.6s ease',
+        'wishlist-heart': 'wishlist-heart 0.6s',
       },
     },
   },

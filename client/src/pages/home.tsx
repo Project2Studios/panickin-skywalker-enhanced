@@ -622,6 +622,15 @@ export default function Home() {
                 )}
               </button>
             </li>
+            <li>
+              <Link 
+                href="/store"
+                className="transition-colors hover:text-primary"
+                data-testid="nav-store"
+              >
+                STORE
+              </Link>
+            </li>
           </ul>
 
           {/* Social Icons */}
@@ -691,7 +700,8 @@ export default function Home() {
                     { id: 'band', label: 'BAND' },
                     { id: 'tour', label: 'TOUR' },
                     { id: 'social', label: 'SOCIAL' },
-                    { id: 'contact', label: 'CONTACT' }
+                    { id: 'contact', label: 'CONTACT' },
+                    { id: 'store', label: 'STORE', href: '/store' }
                   ].map((item) => (
                     <motion.li
                       key={item.id}
@@ -702,22 +712,32 @@ export default function Home() {
                       }}
                       transition={{ duration: 0.2 }}
                     >
-                      <button 
-                        onClick={() => scrollToSection(item.id)}
-                        className={`block transition-colors ${
-                          activeSection === item.id ? 'text-primary' : 'hover:text-primary'
-                        }`}
-                        data-testid={`mobile-nav-${item.id}`}
-                      >
-                        {item.label}
-                        {activeSection === item.id && (
-                          <motion.div 
-                            className="w-8 h-0.5 bg-primary mx-auto mt-1"
-                            layoutId="activeMobileTab"
-                            transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                          />
-                        )}
-                      </button>
+                      {item.href ? (
+                        <Link 
+                          href={item.href}
+                          className="block transition-colors hover:text-primary"
+                          data-testid={`mobile-nav-${item.id}`}
+                        >
+                          {item.label}
+                        </Link>
+                      ) : (
+                        <button 
+                          onClick={() => scrollToSection(item.id)}
+                          className={`block transition-colors ${
+                            activeSection === item.id ? 'text-primary' : 'hover:text-primary'
+                          }`}
+                          data-testid={`mobile-nav-${item.id}`}
+                        >
+                          {item.label}
+                          {activeSection === item.id && (
+                            <motion.div 
+                              className="w-8 h-0.5 bg-primary mx-auto mt-1"
+                              layoutId="activeMobileTab"
+                              transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                            />
+                          )}
+                        </button>
+                      )}
                     </motion.li>
                   ))}
                 </motion.ul>
@@ -1691,9 +1711,9 @@ export default function Home() {
                   </button>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-primary transition-colors" data-testid="footer-store">
+                  <Link href="/store" className="hover:text-primary transition-colors" data-testid="footer-store">
                     Store
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>

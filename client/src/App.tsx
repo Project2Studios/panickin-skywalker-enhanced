@@ -10,13 +10,94 @@ import { AnalyticsDashboard } from "@/components/conversion/analytics-dashboard"
 import { UrgencyBanner } from "@/components/conversion/urgency-indicators";
 import Home from "@/pages/home";
 import Social from "@/pages/social";
+import StorePage from "@/pages/store";
+import CategoryPage from "@/pages/category";
+import ProductDetailPage from "@/pages/product-detail";
+import SearchPage from "@/pages/search";
+import CartPage from "@/pages/cart";
+import CheckoutPage from "@/pages/checkout";
+import CheckoutShippingPage from "@/pages/checkout/shipping";
+import CheckoutPaymentPage from "@/pages/checkout/payment";
+import CheckoutSuccessPage from "@/pages/checkout/success";
 import NotFound from "@/pages/not-found";
+
+// Customer Order Pages
+import OrderHistoryPage from "@/pages/account/orders";
+import OrderDetailPage from "@/pages/account/order-detail";
+import TrackOrderPage from "@/pages/track-order";
+
+// Admin imports
+import { AdminLayout } from "@/components/admin/layout/admin-layout";
+import AdminDashboard from "@/pages/admin/dashboard";
+import AdminProducts from "@/pages/admin/products";
+import AdminProductNew from "@/pages/admin/product-new";
+import AdminCategories from "@/pages/admin/categories";
+import AdminOrders from "@/pages/admin/orders";
+import AdminOrderDetail from "@/pages/admin/order-detail";
+import AdminInventory from "@/pages/admin/inventory";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/social" component={Social} />
+      
+      {/* Store routes */}
+      <Route path="/store" component={StorePage} />
+      <Route path="/store/search" component={SearchPage} />
+      <Route path="/store/category/:slug" component={CategoryPage} />
+      <Route path="/store/:slug" component={ProductDetailPage} />
+      <Route path="/cart" component={CartPage} />
+      
+      {/* Checkout routes */}
+      <Route path="/checkout" component={CheckoutPage} />
+      <Route path="/checkout/shipping" component={CheckoutShippingPage} />
+      <Route path="/checkout/payment" component={CheckoutPaymentPage} />
+      <Route path="/checkout/success" component={CheckoutSuccessPage} />
+      
+      {/* Customer Order routes */}
+      <Route path="/account/orders" component={OrderHistoryPage} />
+      <Route path="/account/orders/:orderNumber" component={OrderDetailPage} />
+      <Route path="/track" component={TrackOrderPage} />
+      <Route path="/track/:orderNumber" component={TrackOrderPage} />
+      
+      {/* Admin routes */}
+      <Route path="/admin">
+        <AdminLayout>
+          <AdminDashboard />
+        </AdminLayout>
+      </Route>
+      <Route path="/admin/products">
+        <AdminLayout>
+          <AdminProducts />
+        </AdminLayout>
+      </Route>
+      <Route path="/admin/products/new">
+        <AdminLayout>
+          <AdminProductNew />
+        </AdminLayout>
+      </Route>
+      <Route path="/admin/categories">
+        <AdminLayout>
+          <AdminCategories />
+        </AdminLayout>
+      </Route>
+      <Route path="/admin/orders">
+        <AdminLayout>
+          <AdminOrders />
+        </AdminLayout>
+      </Route>
+      <Route path="/admin/orders/:id">
+        <AdminLayout>
+          <AdminOrderDetail />
+        </AdminLayout>
+      </Route>
+      <Route path="/admin/inventory">
+        <AdminLayout>
+          <AdminInventory />
+        </AdminLayout>
+      </Route>
+      
       <Route component={NotFound} />
     </Switch>
   );

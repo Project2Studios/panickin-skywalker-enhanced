@@ -4,6 +4,23 @@ import { storage } from "./storage";
 import { insertNewsletterSubscriberSchema, type InsertNewsletterSubscriber } from "@shared/schema";
 import { z } from "zod";
 
+// Import route modules
+import categoriesRouter from "./routes/categories";
+import productsRouter from "./routes/products";
+import cartRouter from "./routes/cart";
+import ordersRouter from "./routes/orders";
+import checkoutRouter from "./routes/checkout";
+import socialRouter from "./routes/social";
+import webhooksRouter from "./routes/webhooks";
+import emailRouter from "./routes/email";
+import analyticsRouter from "./routes/analytics";
+
+// Import admin route modules
+import adminProductsRouter from "./routes/admin/products";
+import adminCategoriesRouter from "./routes/admin/categories";
+import adminOrdersRouter from "./routes/admin/orders";
+import adminInventoryRouter from "./routes/admin/inventory";
+
 export async function registerRoutes(app: Express): Promise<Server> {
   // Newsletter signup endpoint
   app.post("/api/newsletter/signup", async (req, res) => {
@@ -58,6 +75,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     }
   });
+
+  // Register e-commerce API routes
+  app.use("/api/categories", categoriesRouter);
+  app.use("/api/products", productsRouter);
+  app.use("/api/cart", cartRouter);
+  app.use("/api/orders", ordersRouter);
+  app.use("/api/checkout", checkoutRouter);
+  app.use("/api/social", socialRouter);
+  app.use("/api/webhooks", webhooksRouter);
+  app.use("/api/email", emailRouter);
+  
+  // Register marketing and analytics API routes
+  app.use("/api/analytics", analyticsRouter);
+
+  // Register admin API routes
+  app.use("/api/admin/products", adminProductsRouter);
+  app.use("/api/admin/categories", adminCategoriesRouter);
+  app.use("/api/admin/orders", adminOrdersRouter);
+  app.use("/api/admin/inventory", adminInventoryRouter);
 
   const httpServer = createServer(app);
   return httpServer;
