@@ -169,6 +169,7 @@
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.8",
-    "@rollup/rollup-linux-x64-gnu": "^4.28.1"
+    "@rollup/rollup-linux-x64-gnu": "^4.28.1",
+    "@esbuild/linux-x64": "^0.25.0"
   }
 }
