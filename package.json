@@ -168,6 +168,7 @@
     "chrome-launcher": "^1.1.0"
   },
   "optionalDependencies": {
-    "bufferutil": "^4.0.8"
+    "bufferutil": "^4.0.8",
+    "@rollup/rollup-linux-x64-gnu": "^4.28.1"
   }
 }
