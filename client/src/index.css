@@ -201,7 +201,13 @@ img {
   /* Store-specific product card enhancements */
   .product-card-enhanced {
     @apply relative overflow-hidden rounded-lg border border-border bg-card transition-all duration-300;
-    @apply hover:border-primary hover:shadow-lg hover:shadow-primary/20;
+    @apply hover:border-primary hover:shadow-lg;
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    transition: all 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .product-card-enhanced:hover {
+    box-shadow: 0 10px 25px rgba(255, 26, 107, 0.2);
   }
   
   .product-card-enhanced::before {
@@ -232,8 +238,12 @@ img {
   
   /* Band-themed category cards */
   .category-card-band {
-    @apply group cursor-pointer transition-all duration-300;
-    @apply hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-2;
+    @apply cursor-pointer transition-all duration-300;
+    @apply hover:shadow-xl hover:-translate-y-2;
+  }
+  
+  .category-card-band:hover {
+    box-shadow: 0 20px 25px -5px rgba(255, 26, 107, 0.3), 0 10px 10px -5px rgba(255, 26, 107, 0.1);
   }
   
   .category-card-band::before {
@@ -269,7 +279,8 @@ img {
   }
   
   .store-nav-item.active {
-    @apply text-primary bg-primary/10;
+    @apply text-primary;
+    background-color: rgba(255, 26, 107, 0.1);
   }
   
   .store-nav-item::after {

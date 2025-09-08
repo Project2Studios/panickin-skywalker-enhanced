@@ -24,7 +24,7 @@ import {
   Gift,
   Crown,
   Users,
-  Lightning
+  Zap
 } from 'lucide-react';
 
 export default function StorePage() {
@@ -99,7 +99,7 @@ export default function StorePage() {
                 { icon: Users, label: '10K+ Customers', value: '10,000+' },
                 { icon: Star, label: 'Average Rating', value: '4.9' },
                 { icon: Package, label: 'Products', value: '150+' },
-                { icon: Lightning, label: 'Fast Shipping', value: '24h' }
+                { icon: Zap, label: 'Fast Shipping', value: '24h' }
               ].map((stat, index) => {
                 const IconComponent = stat.icon;
                 return (
