@@ -10,8 +10,8 @@ export default defineConfig({
     react({
       // Optimize React Fast Refresh
       fastRefresh: true,
-      // Enable automatic JSX runtime
-      jsxRuntime: 'automatic',
+      // Use classic JSX runtime to ensure React is properly bundled
+      jsxRuntime: 'classic',
       // Exclude node_modules from Fast Refresh
       exclude: [/node_modules/],
     }),
