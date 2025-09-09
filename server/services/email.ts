@@ -124,8 +124,14 @@ class EmailService {
         this.isConfigured = false;
       }
     } catch (error) {
-      console.error('📧 Email service configuration failed:', error);
-      this.isConfigured = false;
+      // Silently fail in development if email service can't be configured
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('📧 Email service disabled (development mode) - emails will not be sent');
+        this.isConfigured = false;
+      } else {
+        console.error('📧 Email service configuration failed:', error);
+        this.isConfigured = false;
+      }
     }
   }
 

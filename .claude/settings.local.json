@@ -37,7 +37,10 @@
       "Bash(npm run:*)",
       "Bash(tsx:*)",
       "Bash(npx tsx:*)",
-      "Bash(lsof:*)"
+      "Bash(lsof:*)",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__get-library-docs",
+      "Bash(pkill:*)"
     ],
     "deny": [],
     "ask": []
