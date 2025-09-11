@@ -3,7 +3,7 @@ import { z } from "zod";
 import { storage } from "../storage";
 import { validateRequest, validateParams, validateQuery } from "../middleware/validation";
 import { optionalAuth, AuthenticatedRequest } from "../middleware/auth";
-import { generateOrderNumber } from "../utils/orderNumber";
+import { generateSimpleOrderNumber } from "../utils/orderNumber";
 
 const router = Router();
 
@@ -116,25 +116,27 @@ router.post("/", validateRequest(createOrderSchema), async (req: AuthenticatedRe
     const total = subtotal + tax + shipping;
 
     // Generate order number
-    const orderNumber = generateOrderNumber();
+    const orderNumber = generateSimpleOrderNumber();
 
     // Create the order
     const order = await storage.createOrder({
-      userId,
+      userId: userId || undefined,
       orderNumber,
-      customerEmail: customerInfo.email,
+      customerEmail: customerInfo.email as string,
       customerName: `${customerInfo.firstName} ${customerInfo.lastName}`,
-      customerPhone: customerInfo.phone || null,
+      customerPhone: customerInfo.phone || undefined,
       status: 'pending',
       subtotal: subtotal.toFixed(2),
-      tax: tax.toFixed(2),
-      shipping: shipping.toFixed(2),
-      total: total.toFixed(2),
-      shippingAddress: JSON.stringify(shippingAddress),
-      billingAddress: JSON.stringify(billingAddress || shippingAddress),
-      paymentMethod,
+      taxAmount: tax.toFixed(2),
+      shippingAmount: shipping.toFixed(2),
+      totalAmount: total.toFixed(2),
+      currency: 'USD',
+      shippingAddressId: 'placeholder', // TODO: Create proper address records
+      billingAddressId: 'placeholder', // TODO: Create proper address records
+      paymentMethod: paymentMethod as string,
       paymentStatus: 'pending',
-      notes,
+      stripePaymentIntentId: undefined,
+      notes: notes || undefined,
     });
 
     // Create order items
@@ -142,17 +144,20 @@ router.post("/", validateRequest(createOrderSchema), async (req: AuthenticatedRe
       await storage.createOrderItem({
         orderId: order.id,
         productId: item.product.id,
-        variantId: item.variant.id,
-        productName: item.product.name,
-        variantName: item.variant.name,
-        sku: item.variant.sku,
+        variantId: item.variant?.id || null,
         quantity: item.quantity,
         unitPrice: item.unitPrice.toFixed(2),
-        lineTotal: item.lineTotal.toFixed(2),
+        totalPrice: item.lineTotal.toFixed(2),
+        productSnapshot: {
+          name: item.product.name,
+          description: item.product.description || undefined,
+          variantName: item.variant?.name,
+          attributes: item.variant?.attributes || {},
+        },
       });
 
       // Reserve inventory (simplified)
-      const inventory = await storage.getInventory(item.product.id, item.variant.id);
+      const inventory = await storage.getInventory(item.product.id, item.variant?.id);
       for (const inv of inventory) {
         if (inv.quantityAvailable >= item.quantity) {
           await storage.updateInventory(inv.id, {
@@ -175,7 +180,7 @@ router.post("/", validateRequest(createOrderSchema), async (req: AuthenticatedRe
         id: order.id,
         orderNumber: order.orderNumber,
         status: order.status,
-        total: parseFloat(order.total),
+        total: parseFloat(order.totalAmount),
         createdAt: order.createdAt,
         estimatedDelivery: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days from now
       }
@@ -207,9 +212,9 @@ router.get("/:orderNumber", validateParams(getOrderParamsSchema), async (req, re
     // Get order items
     const orderItems = await storage.getOrderItems(order.id);
     
-    // Parse addresses
-    const shippingAddress = order.shippingAddress ? JSON.parse(order.shippingAddress) : null;
-    const billingAddress = order.billingAddress ? JSON.parse(order.billingAddress) : null;
+    // TODO: Get addresses from shippingAddressId and billingAddressId
+    const shippingAddress = null; // order.shippingAddressId
+    const billingAddress = null; // order.billingAddressId
 
     // Calculate estimated delivery date
     const createdDate = new Date(order.createdAt);
@@ -227,18 +232,18 @@ router.get("/:orderNumber", validateParams(getOrderParamsSchema), async (req, re
       },
       items: orderItems.map(item => ({
         id: item.id,
-        productName: item.productName,
-        variantName: item.variantName,
-        sku: item.sku,
+        productName: item.productSnapshot?.name || 'Unknown Product',
+        variantName: item.productSnapshot?.variantName || null,
+        sku: null, // Not stored in productSnapshot
         quantity: item.quantity,
         unitPrice: parseFloat(item.unitPrice),
-        lineTotal: parseFloat(item.lineTotal),
+        lineTotal: parseFloat(item.totalPrice),
       })),
       totals: {
         subtotal: parseFloat(order.subtotal),
-        tax: parseFloat(order.tax),
-        shipping: parseFloat(order.shipping),
-        total: parseFloat(order.total),
+        tax: parseFloat(order.taxAmount),
+        shipping: parseFloat(order.shippingAmount),
+        total: parseFloat(order.totalAmount),
       },
       addresses: {
         shipping: shippingAddress,
@@ -293,7 +298,7 @@ router.get("/", validateQuery(getUserOrdersQuerySchema), async (req: Authenticat
           orderNumber: order.orderNumber,
           status: order.status,
           paymentStatus: order.paymentStatus,
-          total: parseFloat(order.total),
+          total: parseFloat(order.totalAmount),
           itemCount,
           createdAt: order.createdAt,
           estimatedDelivery: new Date(new Date(order.createdAt).getTime() + 7 * 24 * 60 * 60 * 1000).toISOString(),

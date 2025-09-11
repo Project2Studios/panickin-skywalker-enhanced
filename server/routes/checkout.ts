@@ -199,7 +199,7 @@ router.post("/create-payment-intent", validateRequest(createPaymentIntentSchema)
       customerInfo,
       metadata: {
         source: 'panickin_skywalker_checkout',
-        itemCount: orderItems.reduce((total, item) => total + item.quantity, 0).toString(),
+        itemCount: orderItems.reduce((total: number, item: any) => total + item.quantity, 0).toString(),
       },
     });
 
@@ -223,7 +223,7 @@ router.post("/create-payment-intent", validateRequest(createPaymentIntentSchema)
     console.error("Error creating payment intent:", error);
     res.status(500).json({
       message: "Failed to create payment intent",
-      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+      error: process.env.NODE_ENV === 'development' ? (error as Error).message : undefined
     });
   }
 });
@@ -314,16 +314,17 @@ router.post("/confirm", validateRequest(confirmOrderSchema), async (req: Authent
       customerEmail: customerInfo.email,
       customerName: `${customerInfo.firstName} ${customerInfo.lastName}`,
       customerPhone: customerInfo.phone || null,
-      status: 'confirmed', // Payment confirmed
+      status: 'processing', // Payment confirmed, processing order
       subtotal: subtotal.toFixed(2),
-      tax: tax.toFixed(2),
-      shipping: shipping.toFixed(2),
-      total: total.toFixed(2),
-      shippingAddress: JSON.stringify(shippingAddress),
-      billingAddress: JSON.stringify(billingAddress || shippingAddress),
+      taxAmount: tax.toFixed(2),
+      shippingAmount: shipping.toFixed(2),
+      totalAmount: total.toFixed(2),
+      currency: 'USD',
+      shippingAddressId: 'placeholder', // TODO: Create proper address records
+      billingAddressId: 'placeholder', // TODO: Create proper address records
       paymentMethod: 'stripe',
       paymentStatus: 'paid',
-      paymentIntentId,
+      stripePaymentIntentId: paymentIntentId,
       notes,
     });
 
@@ -332,17 +333,20 @@ router.post("/confirm", validateRequest(confirmOrderSchema), async (req: Authent
       await storage.createOrderItem({
         orderId: order.id,
         productId: item.product.id,
-        variantId: item.variant.id,
-        productName: item.product.name,
-        variantName: item.variant.name,
-        sku: item.variant.sku,
+        variantId: item.variant?.id || null,
         quantity: item.quantity,
         unitPrice: item.unitPrice.toFixed(2),
-        lineTotal: item.lineTotal.toFixed(2),
+        totalPrice: item.lineTotal.toFixed(2),
+        productSnapshot: {
+          name: item.product.name,
+          description: item.product.description || undefined,
+          variantName: item.variant?.name,
+          attributes: item.variant?.attributes || {},
+        },
       });
 
       // Reserve inventory
-      const inventory = await storage.getInventory(item.product.id, item.variant.id);
+      const inventory = await storage.getInventory(item.product.id, item.variant?.id);
       for (const inv of inventory) {
         if (inv.quantityAvailable >= item.quantity) {
           await storage.updateInventory(inv.id, {
@@ -366,7 +370,7 @@ router.post("/confirm", validateRequest(confirmOrderSchema), async (req: Authent
         orderNumber: order.orderNumber,
         status: order.status,
         paymentStatus: order.paymentStatus,
-        total: parseFloat(order.total),
+        total: parseFloat(order.totalAmount),
         createdAt: order.createdAt,
         estimatedDelivery: new Date(Date.now() + getShippingEstimate(shippingMethod) * 24 * 60 * 60 * 1000).toISOString(),
       },
@@ -460,8 +464,7 @@ async function verifyPayment(paymentIntentId: string): Promise<boolean> {
     
     // Check if payment was successful
     const isSucceeded = paymentIntent.status === 'succeeded';
-    const isPaid = paymentIntent.charges && paymentIntent.charges.data.length > 0 && 
-                   paymentIntent.charges.data[0].paid;
+    const isPaid = isSucceeded; // For PaymentIntent, succeeded status means paid
     
     console.log(`Payment intent ${paymentIntentId} status: ${paymentIntent.status}, paid: ${isPaid}`);
     

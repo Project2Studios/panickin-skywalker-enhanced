@@ -45,20 +45,20 @@ router.get("/", async (req: AuthenticatedRequest, res) => {
       cartItems.map(async (item) => {
         const [product, variant, images] = await Promise.all([
           storage.getProduct(item.productId),
-          storage.getProductVariant(item.variantId),
+          item.variantId ? storage.getProductVariant(item.variantId) : null,
           storage.getProductImages(item.productId)
         ]);
 
-        if (!product || !variant) {
+        if (!product || (item.variantId && !variant)) {
           console.warn(`Cart item ${item.id} has invalid product or variant`);
           return null;
         }
 
         // Check stock availability
-        const inventory = await storage.getInventory(item.productId, item.variantId);
-        const availableStock = inventory.reduce((total, inv) => total + inv.quantityAvailable, variant.stockQuantity);
+        const inventory = await storage.getInventory(item.productId, item.variantId || undefined);
+        const availableStock = inventory.reduce((total, inv) => total + inv.quantityAvailable, variant?.stockQuantity || 0);
         
-        const finalPrice = parseFloat(product.basePrice) + parseFloat(variant.priceAdjustment);
+        const finalPrice = parseFloat(product.basePrice) + parseFloat(variant?.priceAdjustment || "0");
         const itemTotal = finalPrice * item.quantity;
 
         return {
@@ -69,13 +69,13 @@ router.get("/", async (req: AuthenticatedRequest, res) => {
             slug: product.slug,
             basePrice: parseFloat(product.basePrice),
           },
-          variant: {
+          variant: variant ? {
             id: variant.id,
             name: variant.name,
             sku: variant.sku,
             priceAdjustment: parseFloat(variant.priceAdjustment),
             attributes: variant.attributes,
-          },
+          } : null,
           quantity: item.quantity,
           price: finalPrice,
           total: itemTotal,
@@ -144,8 +144,8 @@ router.post("/items", validateRequest(addToCartSchema), async (req: Authenticate
     }
 
     // Check stock availability
-    const inventory = await storage.getInventory(productId, variantId);
-    const availableStock = inventory.reduce((total, inv) => total + inv.quantityAvailable, variant.stockQuantity);
+    const inventory = await storage.getInventory(productId, variantId || undefined);
+    const availableStock = inventory.reduce((total, inv) => total + inv.quantityAvailable, variant?.stockQuantity || 0);
 
     if (availableStock < quantity) {
       return res.status(400).json({
@@ -195,11 +195,11 @@ router.post("/items", validateRequest(addToCartSchema), async (req: Authenticate
       productId,
       variantId,
       quantity,
-      userId,
-      sessionId: userId ? undefined : sessionId,
+      userId: userId || null,
+      sessionId: userId ? null : sessionId,
     });
 
-    const finalPrice = parseFloat(product.basePrice) + parseFloat(variant.priceAdjustment);
+    const finalPrice = parseFloat(product.basePrice) + parseFloat(variant?.priceAdjustment || "0");
 
     res.status(201).json({
       message: "Item added to cart",
@@ -210,11 +210,11 @@ router.post("/items", validateRequest(addToCartSchema), async (req: Authenticate
           name: product.name,
           slug: product.slug
         },
-        variant: {
+        variant: variant ? {
           id: variant.id,
           name: variant.name,
           sku: variant.sku
-        },
+        } : null,
         quantity: cartItem.quantity,
         price: finalPrice,
         total: finalPrice * cartItem.quantity,
@@ -271,7 +271,7 @@ router.put("/items/:id",
       // Check stock availability for new quantity
       const [product, variant] = await Promise.all([
         storage.getProduct(cartItem.productId),
-        storage.getProductVariant(cartItem.variantId)
+        cartItem.variantId ? storage.getProductVariant(cartItem.variantId) : Promise.resolve(null)
       ]);
 
       if (!product || !variant) {
@@ -280,8 +280,8 @@ router.put("/items/:id",
         });
       }
 
-      const inventory = await storage.getInventory(cartItem.productId, cartItem.variantId);
-      const availableStock = inventory.reduce((total, inv) => total + inv.quantityAvailable, variant.stockQuantity);
+      const inventory = await storage.getInventory(cartItem.productId, cartItem.variantId || undefined);
+      const availableStock = inventory.reduce((total, inv) => total + inv.quantityAvailable, variant?.stockQuantity || 0);
 
       if (availableStock < quantity) {
         return res.status(400).json({
@@ -300,7 +300,7 @@ router.put("/items/:id",
         });
       }
 
-      const finalPrice = parseFloat(product.basePrice) + parseFloat(variant.priceAdjustment);
+      const finalPrice = parseFloat(product.basePrice) + parseFloat(variant?.priceAdjustment || "0");
 
       res.json({
         message: "Cart item updated",
@@ -427,12 +427,12 @@ router.post("/merge", validateRequest(mergeCartSchema), async (req: Authenticate
         // Check stock limits
         const [product, variant] = await Promise.all([
           storage.getProduct(guestItem.productId),
-          storage.getProductVariant(guestItem.variantId)
+          guestItem.variantId ? storage.getProductVariant(guestItem.variantId) : Promise.resolve(null)
         ]);
 
         if (product && variant) {
-          const inventory = await storage.getInventory(guestItem.productId, guestItem.variantId);
-          const availableStock = inventory.reduce((total, inv) => total + inv.quantityAvailable, variant.stockQuantity);
+          const inventory = await storage.getInventory(guestItem.productId, guestItem.variantId || undefined);
+          const availableStock = inventory.reduce((total, inv) => total + inv.quantityAvailable, variant?.stockQuantity || 0);
           
           const finalQuantity = Math.min(newQuantity, availableStock, 50);
           await storage.updateCartItem(existingUserItem.id, finalQuantity);
@@ -449,7 +449,7 @@ router.post("/merge", validateRequest(mergeCartSchema), async (req: Authenticate
             variantId: guestItem.variantId,
             quantity: guestItem.quantity,
             userId,
-            sessionId: undefined,
+            sessionId: null,
           });
           mergedItems++;
         } catch (error) {
