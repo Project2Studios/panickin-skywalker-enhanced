@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   Table,
   TableBody,
@@ -208,7 +208,7 @@ export function DataTable<T extends Record<string, any>>({
                   <Checkbox
                     checked={allSelected}
                     ref={(el) => {
-                      if (el) el.indeterminate = someSelected;
+                      if (el) (el as any).indeterminate = someSelected;
                     }}
                     onCheckedChange={handleSelectAll}
                   />

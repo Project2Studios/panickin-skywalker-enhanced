@@ -122,7 +122,10 @@ const mockOrders: Order[] = [
   },
 ];
 
-const statusColors = {
+type OrderStatus = "pending" | "processing" | "shipped" | "delivered" | "cancelled";
+type PaymentStatus = "pending" | "paid" | "failed" | "refunded";
+
+const statusColors: Record<OrderStatus, { bg: string; text: string; border: string }> = {
   pending: { bg: "bg-yellow-500/10", text: "text-yellow-600", border: "border-yellow-500/20" },
   processing: { bg: "bg-blue-500/10", text: "text-blue-600", border: "border-blue-500/20" },
   shipped: { bg: "bg-purple-500/10", text: "text-purple-600", border: "border-purple-500/20" },
@@ -130,7 +133,7 @@ const statusColors = {
   cancelled: { bg: "bg-red-500/10", text: "text-red-600", border: "border-red-500/20" },
 };
 
-const paymentStatusColors = {
+const paymentStatusColors: Record<PaymentStatus, { bg: string; text: string; border: string }> = {
   pending: { bg: "bg-yellow-500/10", text: "text-yellow-600", border: "border-yellow-500/20" },
   paid: { bg: "bg-green-500/10", text: "text-green-600", border: "border-green-500/20" },
   failed: { bg: "bg-red-500/10", text: "text-red-600", border: "border-red-500/20" },
@@ -183,21 +186,28 @@ export function OrderList() {
     {
       key: "status",
       label: "Status",
-      render: (value, order) => (
-        <div className="space-y-1">
-          <Badge 
-            className={`${statusColors[value].bg} ${statusColors[value].text} ${statusColors[value].border}`}
-          >
-            {value}
-          </Badge>
-          <Badge 
-            className={`${paymentStatusColors[order.paymentStatus].bg} ${paymentStatusColors[order.paymentStatus].text} ${paymentStatusColors[order.paymentStatus].border}`}
-            variant="outline"
-          >
-            {order.paymentStatus}
-          </Badge>
-        </div>
-      ),
+      render: (value, order) => {
+        const status = value as OrderStatus;
+        const paymentStatus = order.paymentStatus as PaymentStatus;
+        const statusColor = statusColors[status] || statusColors.pending;
+        const paymentColor = paymentStatusColors[paymentStatus] || paymentStatusColors.pending;
+        
+        return (
+          <div className="space-y-1">
+            <Badge 
+              className={`${statusColor.bg} ${statusColor.text} ${statusColor.border}`}
+            >
+              {value}
+            </Badge>
+            <Badge 
+              className={`${paymentColor.bg} ${paymentColor.text} ${paymentColor.border}`}
+              variant="outline"
+            >
+              {order.paymentStatus}
+            </Badge>
+          </div>
+        );
+      },
     },
     {
       key: "items",

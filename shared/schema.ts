@@ -7,6 +7,8 @@ export const users = pgTable("users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
+  email: text("email"),
+  name: text("name"),
 });
 
 export const newsletterSubscribers = pgTable("newsletter_subscribers", {
@@ -162,6 +164,10 @@ export const orders = pgTable("orders", {
   userId: varchar("user_id").references(() => users.id, { onDelete: "set null" }), // nullable for guest orders
   orderNumber: text("order_number").notNull().unique(),
   status: text("status").notNull().default("pending"), // pending, processing, shipped, delivered, cancelled
+  // Customer info - stored with order for historical purposes
+  customerEmail: text("customer_email").notNull(),
+  customerName: text("customer_name").notNull(),
+  customerPhone: text("customer_phone"),
   subtotal: decimal("subtotal", { precision: 10, scale: 2 }).notNull(),
   taxAmount: decimal("tax_amount", { precision: 10, scale: 2 }).notNull().default("0.00"),
   shippingAmount: decimal("shipping_amount", { precision: 10, scale: 2 }).notNull().default("0.00"),

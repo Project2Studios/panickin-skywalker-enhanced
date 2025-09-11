@@ -1,3 +1,4 @@
+import React from "react";
 import { useLocation } from "wouter";
 import { Sidebar } from "./admin-sidebar";
 import { AdminHeader } from "./admin-header";

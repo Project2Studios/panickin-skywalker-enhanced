@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Menu, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -226,7 +226,7 @@ export default function Header() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            ref={menuSwipe.ref}
+            ref={menuSwipe.ref as React.RefObject<HTMLDivElement>}
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}

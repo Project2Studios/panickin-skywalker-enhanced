@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -145,7 +145,7 @@ export function ProductForm({ product, onSubmit, isLoading = false }: ProductFor
 
     // Mock implementation - in real app, upload to cloud storage
     Array.from(files).forEach((file, index) => {
-      const url = URL.createObjectURL(file);
+      const url = URL.createObjectURL(file as Blob);
       const newImage: ProductImage = {
         imageUrl: url,
         altText: `${form.getValues("name")} image ${images.length + index + 1}`,

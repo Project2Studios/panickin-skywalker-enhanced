@@ -1,5 +1,5 @@
+import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useSwipe } from "@/hooks/use-swipe";
 import { useTouchFeedback } from "@/hooks/use-touch-feedback";
@@ -96,7 +96,7 @@ export default function Band() {
         {isMobile ? (
           <div className="relative max-w-sm mx-auto">
             <div 
-              ref={memberSwipe.ref}
+              ref={memberSwipe.ref as React.RefObject<HTMLDivElement>}
               className="relative overflow-hidden touch-pan-x"
               style={{ touchAction: 'pan-x pinch-zoom' }}
             >

@@ -8,8 +8,6 @@ import { splitVendorChunkPlugin } from 'vite';
 export default defineConfig({
   plugins: [
     react({
-      // Optimize React Fast Refresh
-      fastRefresh: true,
       // Use classic JSX runtime to ensure React is properly bundled
       jsxRuntime: 'classic',
       // Exclude node_modules from Fast Refresh
@@ -162,6 +160,35 @@ export default defineConfig({
       }
     })
   },
+  // Pre-transform known dependencies for faster dev server startup
+  optimizeDeps: {
+    include: [
+      'react',
+      'react-dom',
+      'react/jsx-runtime',
+      'framer-motion',
+      '@tanstack/react-query',
+      'lucide-react',
+      'react-icons/si',
+      'wouter',
+      'clsx',
+      'tailwind-merge',
+      'class-variance-authority',
+      'axios',
+      'date-fns',
+      'recharts'
+    ],
+    // Exclude problematic dependencies
+    exclude: [
+      '@replit/vite-plugin-runtime-error-modal',
+      'howler' // Audio library can cause issues with pre-bundling
+    ],
+    // Force optimization of certain dependencies
+    force: process.env.NODE_ENV === 'development' ? [
+      'react-dom',
+      'framer-motion'
+    ] : undefined
+  },
   server: {
     fs: {
       strict: true,
@@ -170,35 +197,6 @@ export default defineConfig({
     // Development optimizations
     hmr: {
       overlay: true,
-    },
-    // Pre-transform known dependencies for faster dev server startup
-    optimizeDeps: {
-      include: [
-        'react',
-        'react-dom',
-        'react/jsx-runtime',
-        'framer-motion',
-        '@tanstack/react-query',
-        'lucide-react',
-        'react-icons/si',
-        'wouter',
-        'clsx',
-        'tailwind-merge',
-        'class-variance-authority',
-        'axios',
-        'date-fns',
-        'recharts'
-      ],
-      // Exclude problematic dependencies
-      exclude: [
-        '@replit/vite-plugin-runtime-error-modal',
-        'howler' // Audio library can cause issues with pre-bundling
-      ],
-      // Force optimization of certain dependencies
-      force: process.env.NODE_ENV === 'development' ? [
-        'react-dom',
-        'framer-motion'
-      ] : undefined
     },
   },
   // CSS optimization

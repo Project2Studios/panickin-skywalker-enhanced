@@ -314,7 +314,13 @@ export function PrivacySettingsModal({
     if (isOpen) {
       const status = getConsentStatus();
       if (status.preferences) {
-        setPreferences(status.preferences as ConsentPreferences);
+        const convertedPreferences: ConsentPreferences = {
+          allowTracking: status.preferences.allowTracking ?? false,
+          allowPersonalization: status.preferences.allowPersonalization ?? false,
+          allowMarketing: status.preferences.allowMarketing ?? false,
+          allowAnalytics: status.preferences.allowAnalytics ?? false,
+        };
+        setPreferences(convertedPreferences);
       }
     }
   }, [isOpen, getConsentStatus]);

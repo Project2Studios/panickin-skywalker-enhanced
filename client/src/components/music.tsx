@@ -154,7 +154,7 @@ export default function Music() {
         {isMobile || window.innerWidth < 1024 ? (
           <div className="relative max-w-4xl mx-auto">
             <div 
-              ref={albumSwipe.ref}
+              ref={albumSwipe.ref as React.RefObject<HTMLDivElement>}
               className="relative overflow-hidden touch-pan-x"
               style={{ touchAction: 'pan-x pinch-zoom' }}
             >
