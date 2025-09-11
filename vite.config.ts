@@ -8,8 +8,8 @@ import { splitVendorChunkPlugin } from 'vite';
 export default defineConfig({
   plugins: [
     react({
-      // Use classic JSX runtime to ensure React is properly bundled
-      jsxRuntime: 'classic',
+      // Use automatic JSX runtime for better compatibility
+      jsxRuntime: 'automatic',
       // Exclude node_modules from Fast Refresh
       exclude: [/node_modules/],
     }),
@@ -61,7 +61,7 @@ export default defineConfig({
         // Advanced manual chunk splitting for optimal caching
         manualChunks: (id) => {
           // React ecosystem
-          if (id.includes('react') || id.includes('react-dom')) {
+          if (id.includes('react') || id.includes('react-dom') || id.includes('jsx-runtime')) {
             return 'react-vendor';
           }
           // Radix UI components
@@ -166,6 +166,7 @@ export default defineConfig({
       'react',
       'react-dom',
       'react/jsx-runtime',
+      'react/jsx-dev-runtime',
       'framer-motion',
       '@tanstack/react-query',
       'lucide-react',

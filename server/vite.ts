@@ -76,7 +76,18 @@ export function serveStatic(app: Express) {
     );
   }
 
-  app.use(express.static(distPath));
+  // Ensure manifest.json is served with correct headers
+  app.get('/manifest.json', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Cache-Control', 'public, max-age=0');
+    res.sendFile(path.resolve(distPath, 'manifest.json'));
+  });
+
+  app.use(express.static(distPath, {
+    maxAge: '1y', // Cache static assets for 1 year
+    etag: true,
+    lastModified: true
+  }));
 
   // fall through to index.html if the file doesn't exist
   app.use("*", (_req, res) => {
