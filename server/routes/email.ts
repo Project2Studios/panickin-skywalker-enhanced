@@ -250,11 +250,11 @@ router.get('/status', async (req: Request, res: Response) => {
     res.json({
       ready: isReady,
       connectionTest,
-      provider: config.provider,
+      provider: config?.provider || 'unknown',
       configured: {
-        smtp: !!config.smtp?.host,
-        fromAddress: !!config.fromAddress,
-        adminEmail: !!config.adminEmail
+        smtp: !!config?.smtp?.host,
+        fromAddress: !!config?.fromAddress,
+        adminEmail: !!config?.adminEmail
       },
       timestamp: new Date().toISOString()
     });

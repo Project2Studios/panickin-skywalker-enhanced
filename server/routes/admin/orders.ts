@@ -255,7 +255,7 @@ router.put("/:id/status",
   async (req: AuthenticatedRequest, res) => {
     try {
       const { id } = req.params;
-      const { status, notes } = req.body;
+      const { status, notes }: { status: string, notes?: string } = req.body;
 
       // Verify order exists
       const existingOrder = await storage.getOrder(id);
@@ -266,7 +266,7 @@ router.put("/:id/status",
       }
 
       // Validate status transition (simplified logic)
-      const validTransitions = {
+      const validTransitions: Record<string, string[]> = {
         'pending': ['confirmed', 'cancelled'],
         'confirmed': ['processing', 'cancelled'],
         'processing': ['shipped', 'cancelled'],
@@ -275,7 +275,7 @@ router.put("/:id/status",
         'cancelled': [] // Final state
       };
 
-      if (!validTransitions[existingOrder.status as keyof typeof validTransitions].includes(status) && 
+      if (!validTransitions[existingOrder.status]?.includes(status) && 
           existingOrder.status !== status) {
         return res.status(400).json({
           message: `Cannot transition from ${existingOrder.status} to ${status}`,
@@ -286,8 +286,8 @@ router.put("/:id/status",
 
       // Update order status
       const updatedOrder = await storage.updateOrder(id, { 
-        status, 
-        notes: notes || existingOrder.notes 
+        status: status as any, 
+        notes: notes || existingOrder.notes || undefined
       });
       
       if (!updatedOrder) {

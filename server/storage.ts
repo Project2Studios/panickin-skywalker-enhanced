@@ -578,7 +578,7 @@ export class PostgreSQLStorage implements IStorage {
     const result = await db.select().from(orders).where(eq(orders.stripePaymentIntentId, paymentIntentId)).limit(1);
     return result[0];
   }
-  async updateOrderStatus(orderId: string, status: "pending" | "processing" | "shipped" | "delivered" | "cancelled", paymentStatus?: "pending" | "paid" | "failed" | "refunded"): Promise<Order | undefined> {
+  async updateOrderStatus(orderId: string, status: string, paymentStatus?: string): Promise<Order | undefined> {
     const updateData: any = { status, updatedAt: new Date() };
     if (paymentStatus) {
       updateData.paymentStatus = paymentStatus;
