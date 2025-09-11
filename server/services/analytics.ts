@@ -84,7 +84,8 @@ export class AnalyticsService {
    */
   async getCustomerAnalytics(userId: string): Promise<CustomerAnalytics | null> {
     try {
-      return await storage.getCustomerAnalytics(userId);
+      const result = await storage.getCustomerAnalytics(userId);
+      return result || null;
     } catch (error) {
       console.error('Error getting customer analytics:', error);
       return null;

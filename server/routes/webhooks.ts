@@ -200,14 +200,16 @@ async function handlePaymentFailed(paymentIntent: Stripe.PaymentIntent) {
 
     // Send payment failure notification
     try {
-      const customer = await storage.getUserById(order.userId);
-      if (customer) {
-        await emailTemplateService.sendPaymentFailureNotification(
-          order.orderNumber,
-          customer.email,
-          customer.name || customer.email,
-          paymentIntent.last_payment_error?.message
-        );
+      if (order.userId) {
+        const customer = await storage.getUserById(order.userId);
+        if (customer) {
+          await emailTemplateService.sendPaymentFailureNotification(
+            order.orderNumber,
+            customer.email || '',
+            customer.name || customer.email || '',
+            paymentIntent.last_payment_error?.message
+          );
+        }
       }
     } catch (emailError) {
       console.error('Failed to send payment failure notification:', emailError);
@@ -300,7 +302,7 @@ async function releaseOrderInventory(orderId: string) {
     
     for (const item of orderItems) {
       // Find inventory entries and release reserved quantity
-      const inventory = await storage.getInventory(item.productId, item.variantId);
+      const inventory = await storage.getInventory(item.productId, item.variantId || undefined);
       
       for (const inv of inventory) {
         if (inv.quantityReserved >= item.quantity) {

@@ -82,19 +82,20 @@ class EmailService {
 
   private async setupTransporter(): Promise<void> {
     try {
-      if (this.config.provider === 'smtp') {
+      if (this.config?.provider === 'smtp') {
         // For development, create test account if no SMTP credentials provided
         if (!this.config.smtp?.auth.user && process.env.NODE_ENV === 'development') {
           console.log('📧 Creating test email account for development...');
           const testAccount = await nodemailer.createTestAccount();
           
-          this.config.smtp = {
-            host: 'smtp.ethereal.email',
-            port: 587,
-            secure: false,
-            auth: {
-              user: testAccount.user,
-              pass: testAccount.pass
+          if (this.config) {
+            this.config.smtp = {
+              host: 'smtp.ethereal.email',
+              port: 587,
+              secure: false,
+              auth: {
+                user: testAccount.user,
+                pass: testAccount.pass
             }
           };
           
@@ -102,21 +103,26 @@ class EmailService {
           console.log(`   User: ${testAccount.user}`);
           console.log(`   Pass: ${testAccount.pass}`);
           console.log('   View emails at: https://ethereal.email');
+          }
         }
 
-        this.transporter = nodemailer.createTransport({
-          host: this.config.smtp!.host,
-          port: this.config.smtp!.port,
-          secure: this.config.smtp!.secure,
-          auth: {
-            user: this.config.smtp!.auth.user,
-            pass: this.config.smtp!.auth.pass
+        if (this.config?.smtp) {
+          this.transporter = nodemailer.createTransport({
+            host: this.config.smtp.host,
+            port: this.config.smtp.port,
+            secure: this.config.smtp.secure,
+            auth: {
+              user: this.config.smtp.auth.user,
+              pass: this.config.smtp.auth.pass
+            }
+          });
+          
+          // Verify connection
+          if (this.transporter) {
+            await this.transporter.verify();
+            this.isConfigured = true;
           }
-        });
-
-        // Verify connection
-        await this.transporter.verify();
-        this.isConfigured = true;
+        }
         console.log('📧 Email service configured successfully');
         
       } else {
@@ -142,7 +148,7 @@ class EmailService {
       return {
         success: false,
         error: 'Email service not configured',
-        provider: this.config.provider,
+        provider: this.config?.provider || 'unknown',
         deliveryTime: Date.now() - startTime
       };
     }
@@ -169,18 +175,21 @@ class EmailService {
 
       // Prepare mail options
       const mailOptions: SendMailOptions = {
-        from: this.config.from,
+        from: this.config?.from || 'noreply@panickinskywalker.com',
         to: Array.isArray(options.to) ? options.to.join(', ') : options.to,
         subject: options.subject,
         html,
         text,
         cc: Array.isArray(options.cc) ? options.cc.join(', ') : options.cc,
         bcc: Array.isArray(options.bcc) ? options.bcc.join(', ') : options.bcc,
-        replyTo: this.config.replyTo,
+        replyTo: this.config?.replyTo || 'noreply@panickinskywalker.com',
         attachments: options.attachments
       };
 
       // Send email
+      if (!this.transporter) {
+        throw new Error('Email transporter not configured');
+      }
       const result = await this.transporter.sendMail(mailOptions);
       const deliveryTime = Date.now() - startTime;
 
@@ -199,7 +208,7 @@ class EmailService {
       return {
         success: true,
         messageId: result.messageId,
-        provider: this.config.provider,
+        provider: this.config?.provider || 'unknown',
         deliveryTime
       };
 
@@ -212,7 +221,7 @@ class EmailService {
       return {
         success: false,
         error: errorMessage,
-        provider: this.config.provider,
+        provider: this.config?.provider || 'unknown',
         deliveryTime
       };
     }
@@ -258,13 +267,13 @@ class EmailService {
     return results.map(result => 
       result.status === 'fulfilled' 
         ? result.value 
-        : { success: false, error: result.reason?.message || 'Bulk email failed', provider: this.config.provider }
+        : { success: false, error: result.reason?.message || 'Bulk email failed', provider: this.config?.provider || 'unknown' }
     );
   }
 
   // Configuration helpers
-  getConfig(): EmailConfig {
-    return { ...this.config };
+  getConfig(): EmailConfig | null {
+    return this.config ? { ...this.config } : null;
   }
 
   isReady(): boolean {
@@ -272,7 +281,7 @@ class EmailService {
   }
 
   async testConnection(): Promise<boolean> {
-    if (!this.isConfigured) return false;
+    if (!this.isConfigured || !this.transporter) return false;
     
     try {
       await this.transporter.verify();
@@ -288,7 +297,7 @@ class EmailService {
     const priorityPrefix = priority === 'high' ? '[URGENT] ' : priority === 'low' ? '[INFO] ' : '';
     
     return this.sendEmail({
-      to: this.config.adminEmail,
+      to: this.config?.adminEmail || 'admin@panickinskywalker.com',
       subject: `${priorityPrefix}${subject}`,
       html,
       tracking: {

@@ -828,11 +828,19 @@ export class PostgreSQLStorage implements IStorage {
 
   // Promotional Campaigns
   async createPromotionalCampaign(campaign: InsertPromotionalCampaign): Promise<PromotionalCampaign> {
-    const campaignData = {
+    const campaignData: InsertPromotionalCampaign = {
       ...campaign,
-      applicableProducts: Array.isArray(campaign.applicableProducts) ? campaign.applicableProducts : (campaign.applicableProducts || []),
-      applicableCategories: Array.isArray(campaign.applicableCategories) ? campaign.applicableCategories : (campaign.applicableCategories || []),
-      customerSegments: Array.isArray(campaign.customerSegments) ? campaign.customerSegments : (campaign.customerSegments || []),
+      applicableProducts: Array.isArray(campaign.applicableProducts) 
+        ? (campaign.applicableProducts as string[])
+        : (campaign.applicableProducts ? [campaign.applicableProducts as string] : []),
+      applicableCategories: Array.isArray(campaign.applicableCategories) 
+        ? (campaign.applicableCategories as string[])
+        : (campaign.applicableCategories ? [campaign.applicableCategories as string] : []),
+      customerSegments: campaign.customerSegments 
+        ? (Array.isArray(campaign.customerSegments) 
+          ? (campaign.customerSegments as string[])
+          : [campaign.customerSegments as string])
+        : [],
     };
     const result = await db.insert(promotionalCampaigns).values(campaignData).returning();
     return result[0];

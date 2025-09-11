@@ -336,7 +336,7 @@ class EmailTemplateService {
         return {
           id: item.id,
           name: product?.name || 'Unknown Product',
-          description: product?.description,
+          description: product?.description || undefined,
           quantity: item.quantity,
           unitPrice: parseFloat(item.unitPrice.toString()),
           totalPrice: parseFloat(item.totalPrice.toString()),

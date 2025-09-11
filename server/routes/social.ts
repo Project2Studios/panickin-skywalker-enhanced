@@ -147,7 +147,7 @@ router.post("/share", validateRequest(socialSharingSchema), async (req, res) => 
     // 3. Track engagement and metrics
     // 4. Return sharing results
     
-    const results = platforms.map(platform => ({
+    const results = platforms.map((platform: string) => ({
       platform,
       success: true,
       shareUrl: `https://${platform}.com/share/${contentId}`,
@@ -158,7 +158,7 @@ router.post("/share", validateRequest(socialSharingSchema), async (req, res) => 
     res.json({
       success: true,
       results,
-      totalEstimatedReach: results.reduce((sum, r) => sum + r.estimatedReach, 0),
+      totalEstimatedReach: results.reduce((sum: number, r: any) => sum + r.estimatedReach, 0),
       shareData: {
         contentId,
         sharedAt: new Date().toISOString(),
