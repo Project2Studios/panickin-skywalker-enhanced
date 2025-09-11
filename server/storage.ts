@@ -828,20 +828,25 @@ export class PostgreSQLStorage implements IStorage {
 
   // Promotional Campaigns
   async createPromotionalCampaign(campaign: InsertPromotionalCampaign): Promise<PromotionalCampaign> {
-    const campaignData: InsertPromotionalCampaign = {
+    // Create a clean campaign data object with proper types
+    const campaignData: any = {
       ...campaign,
-      applicableProducts: Array.isArray(campaign.applicableProducts) 
-        ? (campaign.applicableProducts as string[])
-        : (campaign.applicableProducts ? [campaign.applicableProducts as string] : []),
-      applicableCategories: Array.isArray(campaign.applicableCategories) 
-        ? (campaign.applicableCategories as string[])
-        : (campaign.applicableCategories ? [campaign.applicableCategories as string] : []),
-      customerSegments: campaign.customerSegments 
-        ? (Array.isArray(campaign.customerSegments) 
-          ? (campaign.customerSegments as string[])
-          : [campaign.customerSegments as string])
-        : [],
+      applicableProducts: campaign.applicableProducts || [],
+      applicableCategories: campaign.applicableCategories || [],
+      customerSegments: campaign.customerSegments || [],
     };
+    
+    // Ensure arrays are arrays (handle non-array values)
+    if (campaign.applicableProducts && !Array.isArray(campaign.applicableProducts)) {
+      campaignData.applicableProducts = [campaign.applicableProducts];
+    }
+    if (campaign.applicableCategories && !Array.isArray(campaign.applicableCategories)) {
+      campaignData.applicableCategories = [campaign.applicableCategories];
+    }
+    if (campaign.customerSegments && !Array.isArray(campaign.customerSegments)) {
+      campaignData.customerSegments = [campaign.customerSegments];
+    }
+    
     const result = await db.insert(promotionalCampaigns).values(campaignData).returning();
     return result[0];
   }
