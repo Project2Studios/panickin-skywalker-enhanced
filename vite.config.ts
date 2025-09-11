@@ -13,8 +13,8 @@ export default defineConfig({
       // Exclude node_modules from Fast Refresh
       exclude: [/node_modules/],
     }),
-    // Vendor chunk splitting for better caching
-    splitVendorChunkPlugin(),
+    // Vendor chunk splitting - disabled to fix React bundling issue
+    // splitVendorChunkPlugin(),
     // Bundle analyzer for production builds (temporarily disabled)
     // ...(process.env.ANALYZE ? [
     //   visualizer({
@@ -60,8 +60,11 @@ export default defineConfig({
       output: {
         // Advanced manual chunk splitting for optimal caching
         manualChunks: (id) => {
-          // React ecosystem
-          if (id.includes('react') || id.includes('react-dom') || id.includes('jsx-runtime')) {
+          // React ecosystem - keep React and ReactDOM together
+          if (id.includes('node_modules/react/') || 
+              id.includes('node_modules/react-dom/') || 
+              id.includes('react/jsx-runtime') ||
+              id.includes('react/jsx-dev-runtime')) {
             return 'react-vendor';
           }
           // Radix UI components
