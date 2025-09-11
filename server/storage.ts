@@ -407,7 +407,7 @@ export class PostgreSQLStorage implements IStorage {
 
   // Product management
   async getProducts(categoryId?: string, featured?: boolean, active?: boolean): Promise<Product[]> {
-    let query = db.select().from(products);
+    let query = db.select().from(products).$dynamic();
     
     const conditions: any[] = [];
     if (categoryId) conditions.push(eq(products.categoryId, categoryId));
@@ -415,11 +415,9 @@ export class PostgreSQLStorage implements IStorage {
     if (active !== undefined) conditions.push(eq(products.isActive, active));
     
     if (conditions.length > 0) {
-      // @ts-ignore - drizzle types issue with where clause
-      query = query.where(conditions.length === 1 ? conditions[0] : conditions.reduce((acc, condition) => acc && condition));
+      query = query.where(conditions.length === 1 ? conditions[0] : and(...conditions));
     }
     
-    // @ts-ignore - drizzle types issue
     return await query;
   }
 
@@ -602,7 +600,7 @@ export class PostgreSQLStorage implements IStorage {
   // Inventory management
   async getInventory(productId: string, variantId?: string): Promise<Inventory[]> {
     if (variantId) {
-      return await db.select().from(inventory).where(eq(inventory.productId, productId) && eq(inventory.variantId, variantId));
+      return await db.select().from(inventory).where(and(eq(inventory.productId, productId), eq(inventory.variantId, variantId)));
     }
     return await db.select().from(inventory).where(eq(inventory.productId, productId));
   }
@@ -650,13 +648,13 @@ export class PostgreSQLStorage implements IStorage {
   }
 
   async getCustomersBySegment(segment: string, limit: number = 100): Promise<CustomerAnalytics[]> {
-    return await db.select().from(customerAnalytics)
+    return await db.select().from(customerAnalytics).$dynamic()
       .where(eq(customerAnalytics.customerSegment, segment))
       .limit(limit);
   }
 
   async getCustomersByRiskScore(minRiskScore: number): Promise<CustomerAnalytics[]> {
-    return await db.select().from(customerAnalytics)
+    return await db.select().from(customerAnalytics).$dynamic()
       .where(gte(customerAnalytics.riskScore, minRiskScore))
       .orderBy(desc(customerAnalytics.riskScore));
   }
@@ -674,7 +672,7 @@ export class PostgreSQLStorage implements IStorage {
       conditions.push(gte(customerBehavior.timestamp, startDate));
     }
     
-    let query = db.select().from(customerBehavior)
+    let query = db.select().from(customerBehavior).$dynamic()
       .where(conditions.length === 1 ? conditions[0] : and(...conditions))
       .orderBy(desc(customerBehavior.timestamp));
     
@@ -682,7 +680,6 @@ export class PostgreSQLStorage implements IStorage {
       query = query.limit(limit);
     }
     
-    // @ts-ignore - drizzle type issue
     return await query;
   }
 
@@ -716,9 +713,9 @@ export class PostgreSQLStorage implements IStorage {
 
   async getEmailCampaigns(status?: string): Promise<EmailCampaign[]> {
     if (status) {
-      return await db.select().from(emailCampaigns).where(eq(emailCampaigns.status, status));
+      return await db.select().from(emailCampaigns).$dynamic().where(eq(emailCampaigns.status, status));
     }
-    return await db.select().from(emailCampaigns).orderBy(desc(emailCampaigns.createdAt));
+    return await db.select().from(emailCampaigns).$dynamic().orderBy(desc(emailCampaigns.createdAt));
   }
 
   async updateEmailCampaign(id: string, updates: Partial<EmailCampaign>): Promise<EmailCampaign | undefined> {
@@ -780,14 +777,14 @@ export class PostgreSQLStorage implements IStorage {
   }
 
   async getLoyaltyTransactions(userId: string, limit: number = 50): Promise<LoyaltyTransaction[]> {
-    return await db.select().from(loyaltyTransactions)
+    return await db.select().from(loyaltyTransactions).$dynamic()
       .where(eq(loyaltyTransactions.userId, userId))
       .orderBy(desc(loyaltyTransactions.createdAt))
       .limit(limit);
   }
 
   async getLoyaltyTransactionsByType(userId: string, type: string): Promise<LoyaltyTransaction[]> {
-    return await db.select().from(loyaltyTransactions)
+    return await db.select().from(loyaltyTransactions).$dynamic()
       .where(and(eq(loyaltyTransactions.userId, userId), eq(loyaltyTransactions.type, type)))
       .orderBy(desc(loyaltyTransactions.createdAt));
   }
@@ -804,7 +801,7 @@ export class PostgreSQLStorage implements IStorage {
       conditions.push(eq(productReviews.isApproved, approved));
     }
     
-    return await db.select().from(productReviews)
+    return await db.select().from(productReviews).$dynamic()
       .where(and(...conditions))
       .orderBy(desc(productReviews.createdAt));
   }
@@ -824,7 +821,7 @@ export class PostgreSQLStorage implements IStorage {
   }
 
   async getReviewsByUser(userId: string): Promise<ProductReview[]> {
-    return await db.select().from(productReviews)
+    return await db.select().from(productReviews).$dynamic()
       .where(eq(productReviews.userId, userId))
       .orderBy(desc(productReviews.createdAt));
   }
@@ -853,7 +850,7 @@ export class PostgreSQLStorage implements IStorage {
 
   async getActivePromotionalCampaigns(): Promise<PromotionalCampaign[]> {
     const now = new Date();
-    return await db.select().from(promotionalCampaigns)
+    return await db.select().from(promotionalCampaigns).$dynamic()
       .where(
         and(
           eq(promotionalCampaigns.isActive, true),
@@ -886,7 +883,7 @@ export class PostgreSQLStorage implements IStorage {
     if (platform) conditions.push(eq(socialContent.platform, platform));
     if (approved !== undefined) conditions.push(eq(socialContent.isApproved, approved));
     
-    const baseQuery = db.select().from(socialContent);
+    const baseQuery = db.select().from(socialContent).$dynamic();
     const filteredQuery = conditions.length > 0 
       ? baseQuery.where(and(...conditions))
       : baseQuery;
@@ -904,7 +901,7 @@ export class PostgreSQLStorage implements IStorage {
   }
 
   async getFeaturedSocialContent(limit: number = 10): Promise<SocialContent[]> {
-    return await db.select().from(socialContent)
+    return await db.select().from(socialContent).$dynamic()
       .where(and(eq(socialContent.isFeatured, true), eq(socialContent.isApproved, true)))
       .orderBy(desc(socialContent.createdAt))
       .limit(limit);
@@ -916,7 +913,7 @@ export class PostgreSQLStorage implements IStorage {
   }
 
   async getOrdersByUser(userId: string): Promise<Order[]> {
-    return await db.select().from(orders)
+    return await db.select().from(orders).$dynamic()
       .where(eq(orders.userId, userId))
       .orderBy(desc(orders.createdAt));
   }

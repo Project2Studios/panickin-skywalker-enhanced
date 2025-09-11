@@ -86,13 +86,13 @@ router.get("/", validateQuery(getOrdersQuerySchema), async (req: AuthenticatedRe
         
         return {
           ...order,
-          total: parseFloat(order.total),
-          subtotal: parseFloat(order.subtotal),
-          tax: parseFloat(order.tax),
-          shipping: parseFloat(order.shipping),
+          total: parseFloat(order.totalAmount.toString()),
+          subtotal: parseFloat(order.subtotal.toString()),
+          tax: parseFloat(order.taxAmount.toString()),
+          shipping: parseFloat(order.shippingAmount.toString()),
           itemCount,
-          shippingAddress: order.shippingAddress ? JSON.parse(order.shippingAddress) : null,
-          billingAddress: order.billingAddress ? JSON.parse(order.billingAddress) : null,
+          shippingAddress: await storage.getShippingAddress(order.shippingAddressId),
+          billingAddress: await storage.getShippingAddress(order.billingAddressId),
         };
       })
     );
@@ -104,10 +104,10 @@ router.get("/", validateQuery(getOrdersQuerySchema), async (req: AuthenticatedRe
         sortedOrders.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
         break;
       case 'total_asc':
-        sortedOrders.sort((a, b) => a.total - b.total);
+        sortedOrders.sort((a, b) => (a.total || 0) - (b.total || 0));
         break;
       case 'total_desc':
-        sortedOrders.sort((a, b) => b.total - a.total);
+        sortedOrders.sort((a, b) => (b.total || 0) - (a.total || 0));
         break;
       case 'newest':
       default:
@@ -121,7 +121,7 @@ router.get("/", validateQuery(getOrdersQuerySchema), async (req: AuthenticatedRe
     // Calculate summary statistics
     const summary = {
       total: sortedOrders.length,
-      totalRevenue: sortedOrders.reduce((sum, order) => sum + order.total, 0),
+      totalRevenue: sortedOrders.reduce((sum, order) => sum + (order.total || 0), 0),
       byStatus: {
         pending: sortedOrders.filter(o => o.status === 'pending').length,
         confirmed: sortedOrders.filter(o => o.status === 'confirmed').length,
@@ -136,7 +136,7 @@ router.get("/", validateQuery(getOrdersQuerySchema), async (req: AuthenticatedRe
         failed: sortedOrders.filter(o => o.paymentStatus === 'failed').length,
         refunded: sortedOrders.filter(o => o.paymentStatus === 'refunded').length,
       },
-      averageOrderValue: sortedOrders.length > 0 ? sortedOrders.reduce((sum, order) => sum + order.total, 0) / sortedOrders.length : 0,
+      averageOrderValue: sortedOrders.length > 0 ? sortedOrders.reduce((sum, order) => sum + (order.total || 0), 0) / sortedOrders.length : 0,
     };
 
     res.json({
@@ -188,13 +188,13 @@ router.get("/:id", validateParams(orderParamsSchema), async (req: AuthenticatedR
       orderItems.map(async (item) => {
         const [product, variant] = await Promise.all([
           storage.getProduct(item.productId),
-          storage.getProductVariant(item.variantId)
+          item.variantId ? storage.getProductVariant(item.variantId) : Promise.resolve(null)
         ]);
 
         return {
           ...item,
-          unitPrice: parseFloat(item.unitPrice),
-          lineTotal: parseFloat(item.lineTotal),
+          unitPrice: parseFloat(item.unitPrice.toString()),
+          lineTotal: parseFloat(item.totalPrice.toString()),
           product: product ? {
             id: product.id,
             name: product.name,
@@ -212,16 +212,18 @@ router.get("/:id", validateParams(orderParamsSchema), async (req: AuthenticatedR
       })
     );
 
-    // Parse addresses
-    const shippingAddress = order.shippingAddress ? JSON.parse(order.shippingAddress) : null;
-    const billingAddress = order.billingAddress ? JSON.parse(order.billingAddress) : null;
+    // Get addresses
+    const [shippingAddress, billingAddress] = await Promise.all([
+      storage.getShippingAddress(order.shippingAddressId),
+      storage.getShippingAddress(order.billingAddressId)
+    ]);
 
     const orderDetails = {
       ...order,
-      total: parseFloat(order.total),
-      subtotal: parseFloat(order.subtotal),
-      tax: parseFloat(order.tax),
-      shipping: parseFloat(order.shipping),
+      total: parseFloat(order.totalAmount.toString()),
+      subtotal: parseFloat(order.subtotal.toString()),
+      tax: parseFloat(order.taxAmount.toString()),
+      shipping: parseFloat(order.shippingAmount.toString()),
       items: detailedItems,
       addresses: {
         shipping: shippingAddress,
@@ -345,7 +347,7 @@ router.get("/stats", async (req: AuthenticatedRequest, res) => {
 
     // Calculate revenue
     const calculateRevenue = (orderList: any[]) => 
-      orderList.reduce((sum, order) => sum + parseFloat(order.total), 0);
+      orderList.reduce((sum, order) => sum + parseFloat(order.totalAmount?.toString() || '0'), 0);
 
     // Recent orders (last 10)
     const recentOrders = orders
@@ -356,19 +358,22 @@ router.get("/stats", async (req: AuthenticatedRequest, res) => {
         orderNumber: order.orderNumber,
         customerName: order.customerName,
         status: order.status,
-        total: parseFloat(order.total),
+        total: parseFloat(order.totalAmount?.toString() || '0'),
         createdAt: order.createdAt
       }));
 
     // Status distribution
     const statusCounts = orders.reduce((acc, order) => {
-      acc[order.status] = (acc[order.status] || 0) + 1;
+      const status = order.status || 'unknown';
+      acc[status] = (acc[status] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
 
     // Top customers (by order count)
     const customerOrders = orders.reduce((acc, order) => {
-      const key = `${order.customerEmail}|${order.customerName}`;
+      const email = order.customerEmail || 'unknown@email.com';
+      const name = order.customerName || 'Unknown Customer';
+      const key = `${email}|${name}`;
       acc[key] = (acc[key] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
@@ -378,15 +383,15 @@ router.get("/stats", async (req: AuthenticatedRequest, res) => {
       .slice(0, 5)
       .map(([customer, orderCount]) => {
         const [email, name] = customer.split('|');
-        return { email, name, orderCount };
+        return { email: email || 'unknown@email.com', name: name || 'Unknown Customer', orderCount };
       });
 
     const stats = {
       overview: {
         totalOrders: orders.length,
         totalRevenue: calculateRevenue(orders),
-        pendingOrders: orders.filter(o => o.status === 'pending').length,
-        completedOrders: orders.filter(o => o.status === 'delivered').length,
+        pendingOrders: orders.filter(o => (o.status || '') === 'pending').length,
+        completedOrders: orders.filter(o => (o.status || '') === 'delivered').length,
         averageOrderValue: orders.length > 0 ? calculateRevenue(orders) / orders.length : 0,
       },
       periods: {

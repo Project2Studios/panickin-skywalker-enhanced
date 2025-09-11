@@ -44,14 +44,14 @@ export class AnalyticsService {
     userId?: string
   ): Promise<void> {
     try {
-      const sessionId = req.sessionID || uuidv4();
+      const sessionId = (req as any).sessionID || uuidv4();
       const userAgent = req.get('user-agent') || '';
-      const ipAddress = req.ip || req.connection.remoteAddress || '';
+      const ipAddress = req.ip || (req as any).connection?.remoteAddress || '';
       const referrer = req.get('referer') || '';
       
       // Parse UTM parameters
-      const utmSource = (req.query.utm_source as string) || null;
-      const utmMedium = (req.query.utm_medium as string) || null;
+      const utmSource = (req.query.utm_source as string) || undefined;
+      const utmMedium = (req.query.utm_medium as string) || undefined;
       const utmCampaign = (req.query.utm_campaign as string) || null;
 
       const behaviorData: InsertCustomerBehavior = {

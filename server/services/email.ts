@@ -52,8 +52,8 @@ export interface EmailDeliveryResult {
 }
 
 class EmailService {
-  private transporter: Transporter;
-  private config: EmailConfig;
+  private transporter: Transporter | null = null;
+  private config: EmailConfig | null = null;
   private isConfigured: boolean = false;
 
   constructor() {

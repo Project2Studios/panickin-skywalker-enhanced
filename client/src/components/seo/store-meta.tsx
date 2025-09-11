@@ -114,7 +114,10 @@ export function StoreMeta({
     ];
 
     // Update existing or create new meta tags
-    metaTags.forEach(({ name, property, content }) => {
+    metaTags.forEach((tag) => {
+      const { content } = tag;
+      const name = 'name' in tag ? tag.name : undefined;
+      const property = 'property' in tag ? tag.property : undefined;
       if (!content) return;
 
       const selector = name ? `meta[name="${name}"]` : `meta[property="${property}"]`;

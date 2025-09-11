@@ -140,7 +140,10 @@ async function handlePaymentSucceeded(paymentIntent: Stripe.PaymentIntent) {
     try {
       const orderData = await emailTemplateService.getOrderEmailData(order.orderNumber);
       if (orderData) {
-        const customer = await storage.getUserById(order.userId);
+        let customer = null;
+        if (order.userId) {
+          customer = await storage.getUserById(order.userId);
+        }
         await emailTemplateService.sendAdminNewOrderNotification({
           orderNumber: order.orderNumber,
           orderDate: order.createdAt.toISOString(),

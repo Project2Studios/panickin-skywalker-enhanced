@@ -319,21 +319,18 @@ class EmailTemplateService {
       }
 
       const orderItems = await storage.getOrderItems(order.id);
-      const customer = await storage.getUserById(order.userId);
-
-      if (!customer) {
-        console.error(`Customer not found for order: ${orderNumber}`);
-        return null;
+      let customer = null;
+      if (order.userId) {
+        customer = await storage.getUserById(order.userId);
       }
 
       // Format items for email template
       const items = await Promise.all(orderItems.map(async (item) => {
-        const product = await storage.getProductById(item.productId);
+        const product = await storage.getProduct(item.productId);
         let variant = null;
         
         if (item.variantId) {
-          const variants = await storage.getProductVariants(item.productId);
-          variant = variants.find(v => v.id === item.variantId);
+          variant = await storage.getProductVariant(item.variantId);
         }
 
         return {
@@ -341,34 +338,44 @@ class EmailTemplateService {
           name: product?.name || 'Unknown Product',
           description: product?.description,
           quantity: item.quantity,
-          unitPrice: item.price,
-          totalPrice: item.price * item.quantity,
-          imageUrl: product?.image,
+          unitPrice: parseFloat(item.unitPrice.toString()),
+          totalPrice: parseFloat(item.totalPrice.toString()),
+          imageUrl: undefined, // Product images would need separate query
           variantName: variant?.name
         };
       }));
 
+      // Get shipping address
+      const shippingAddress = await storage.getShippingAddress(order.shippingAddressId);
+      
       return {
-        customerName: customer.name || customer.email,
-        customerEmail: customer.email,
+        customerName: customer?.name || order.customerName || order.customerEmail,
+        customerEmail: customer?.email || order.customerEmail,
         orderNumber: order.orderNumber,
         orderDate: order.createdAt.toISOString(),
         items,
-        subtotal: order.subtotal,
-        shipping: order.shipping,
-        tax: order.tax,
-        total: order.total,
-        shippingAddress: {
-          name: order.shippingName,
-          line1: order.shippingAddressLine1,
-          line2: order.shippingAddressLine2 || undefined,
-          city: order.shippingCity,
-          state: order.shippingState,
-          postalCode: order.shippingPostalCode,
-          country: order.shippingCountry
+        subtotal: parseFloat(order.subtotal.toString()),
+        shipping: parseFloat(order.shippingAmount.toString()),
+        tax: parseFloat(order.taxAmount.toString()),
+        total: parseFloat(order.totalAmount.toString()),
+        shippingAddress: shippingAddress ? {
+          name: `${shippingAddress.firstName} ${shippingAddress.lastName}`,
+          line1: shippingAddress.addressLine1,
+          line2: shippingAddress.addressLine2 || undefined,
+          city: shippingAddress.city,
+          state: shippingAddress.state,
+          postalCode: shippingAddress.postalCode,
+          country: shippingAddress.country
+        } : {
+          name: order.customerName,
+          line1: 'Address not available',
+          city: 'Unknown',
+          state: 'Unknown',
+          postalCode: '00000',
+          country: 'US'
         },
-        trackingUrl: order.trackingNumber ? `${process.env.BASE_URL}/track/${order.orderNumber}` : undefined,
-        estimatedDelivery: order.estimatedDelivery?.toISOString()
+        trackingUrl: undefined, // Would need tracking number field
+        estimatedDelivery: undefined // Would need estimated delivery field
       };
     } catch (error) {
       console.error('Error getting order email data:', error);
@@ -394,8 +401,8 @@ class EmailTemplateService {
         </div>
         
         <div style="text-align: center; margin: 30px 0;">
-          <a href="${process.env.BASE_URL}/account/orders/${orderNumber}" 
-             style="background: #3b82f6; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: bold;">
+          <a href="${process.env.BASE_URL || 'https://panickinskywalker.com'}/account/orders/${orderNumber}" 
+             style="background: #3b82f6; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: bold; display: inline-block;">
             💳 Retry Payment
           </a>
         </div>
@@ -403,7 +410,7 @@ class EmailTemplateService {
         <div style="background: #f0f9ff; padding: 20px; border-radius: 8px; text-align: center;">
           <p style="color: #0c4a6e; margin: 0;">Need help? Our anxious but helpful support team is here for you!</p>
           <p style="color: #0c4a6e; margin: 10px 0 0 0;">
-            Email: <a href="mailto:support@panickinskywalker.com">support@panickinskywalker.com</a>
+            Email: <a href="mailto:support@panickinskywalker.com" style="color: #0c4a6e;">support@panickinskywalker.com</a>
           </p>
         </div>
       </div>
@@ -439,12 +446,12 @@ class EmailTemplateService {
         </div>
         
         <div style="text-align: center; margin: 30px 0;">
-          <a href="${process.env.BASE_URL}/track/${orderNumber}" 
-             style="background: ${statusColor}; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: bold; margin-right: 10px;">
+          <a href="${process.env.BASE_URL || 'https://panickinskywalker.com'}/track/${orderNumber}" 
+             style="background: ${statusColor}; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: bold; margin-right: 10px; display: inline-block;">
             🔍 Track Order
           </a>
-          <a href="${process.env.BASE_URL}/account/orders/${orderNumber}" 
-             style="background: #64748b; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: bold;">
+          <a href="${process.env.BASE_URL || 'https://panickinskywalker.com'}/account/orders/${orderNumber}" 
+             style="background: #64748b; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: bold; display: inline-block;">
             📋 View Details
           </a>
         </div>
