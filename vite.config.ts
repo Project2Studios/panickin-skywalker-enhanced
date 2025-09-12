@@ -59,64 +59,51 @@ export default defineConfig({
     // Chunk size optimization
     rollupOptions: {
       output: {
-        // Advanced manual chunk splitting for optimal caching
-        manualChunks: (id) => {
-          // React ecosystem - ensure React and ALL its dependencies stay together
-          // This prevents the "Cannot read properties of undefined (reading 'useState')" error
-          if (id.includes('node_modules/react/') || 
-              id.includes('node_modules/react-dom/') || 
-              id.includes('/react/') ||
-              id.includes('/react-dom/') ||
-              id.includes('react/jsx-runtime') || 
-              id.includes('react/jsx-dev-runtime') ||
-              id.includes('@remix-run/router') || // React Router dependency
-              id.includes('scheduler')) { // React scheduler
-            return 'react-vendor';
-          }
-          // Radix UI components
-          if (id.includes('@radix-ui')) {
-            return 'radix-vendor';
-          }
-          // Framer Motion
-          if (id.includes('framer-motion')) {
-            return 'animation-vendor';
-          }
-          // Icons
-          if (id.includes('lucide-react') || id.includes('react-icons')) {
-            return 'icons-vendor';
-          }
-          // Utilities
-          if (id.includes('clsx') || id.includes('tailwind-merge') || id.includes('class-variance-authority')) {
-            return 'utils-vendor';
-          }
-          // Data fetching
-          if (id.includes('@tanstack/react-query') || id.includes('axios')) {
-            return 'data-vendor';
-          }
-          // Routing
-          if (id.includes('wouter')) {
-            return 'routing-vendor';
-          }
-          // Audio
-          if (id.includes('howler')) {
-            return 'audio-vendor';
-          }
-          // Date utilities
-          if (id.includes('date-fns') || id.includes('moment')) {
-            return 'date-vendor';
-          }
-          // Payment
-          if (id.includes('stripe')) {
-            return 'payment-vendor';
-          }
-          // Charts
-          if (id.includes('recharts')) {
-            return 'charts-vendor';
-          }
-          // Node modules that aren't vendors
-          if (id.includes('node_modules')) {
-            return 'vendor';
-          }
+        // Simplified chunking strategy to prevent React splitting issues
+        manualChunks: {
+          // Keep all React-related code in a single chunk
+          'react-vendor': [
+            'react',
+            'react-dom',
+            'react/jsx-runtime',
+            'react/jsx-dev-runtime'
+          ],
+          // All UI libraries that depend on React
+          'ui-vendor': [
+            '@radix-ui/react-accordion',
+            '@radix-ui/react-alert-dialog',
+            '@radix-ui/react-aspect-ratio',
+            '@radix-ui/react-avatar',
+            '@radix-ui/react-checkbox',
+            '@radix-ui/react-collapsible',
+            '@radix-ui/react-context-menu',
+            '@radix-ui/react-dialog',
+            '@radix-ui/react-dropdown-menu',
+            '@radix-ui/react-hover-card',
+            '@radix-ui/react-label',
+            '@radix-ui/react-menubar',
+            '@radix-ui/react-navigation-menu',
+            '@radix-ui/react-popover',
+            '@radix-ui/react-progress',
+            '@radix-ui/react-radio-group',
+            '@radix-ui/react-scroll-area',
+            '@radix-ui/react-select',
+            '@radix-ui/react-separator',
+            '@radix-ui/react-slider',
+            '@radix-ui/react-slot',
+            '@radix-ui/react-switch',
+            '@radix-ui/react-tabs',
+            '@radix-ui/react-toast',
+            '@radix-ui/react-toggle',
+            '@radix-ui/react-toggle-group',
+            '@radix-ui/react-tooltip',
+            'framer-motion',
+            'lucide-react',
+            'recharts',
+            'react-hook-form',
+            '@tanstack/react-query',
+            'wouter'
+          ]
         },
         // Optimize chunk and asset names for CDN caching
         chunkFileNames: (chunkInfo) => {
