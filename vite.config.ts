@@ -13,7 +13,7 @@ export default defineConfig({
       // Exclude node_modules from Fast Refresh
       exclude: [/node_modules/],
     }),
-    // Vendor chunk splitting - disabled to fix React bundling issue
+    // Vendor chunk splitting - temporarily disabled to fix React bundling
     // splitVendorChunkPlugin(),
     // Bundle analyzer for production builds (temporarily disabled)
     // ...(process.env.ANALYZE ? [
@@ -60,10 +60,10 @@ export default defineConfig({
       output: {
         // Advanced manual chunk splitting for optimal caching
         manualChunks: (id) => {
-          // React ecosystem - keep React and ReactDOM together
+          // React ecosystem - ensure React stays together
           if (id.includes('node_modules/react/') || 
               id.includes('node_modules/react-dom/') || 
-              id.includes('react/jsx-runtime') ||
+              id.includes('react/jsx-runtime') || 
               id.includes('react/jsx-dev-runtime')) {
             return 'react-vendor';
           }

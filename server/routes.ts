@@ -22,6 +22,13 @@ import adminOrdersRouter from "./routes/admin/orders";
 import adminInventoryRouter from "./routes/admin/inventory";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Serve manifest.json without authentication (must be before auth middleware)
+  app.get('/manifest.json', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    res.sendFile(require('path').resolve(__dirname, '../client/public/manifest.json'));
+  });
+
   // Newsletter signup endpoint
   app.post("/api/newsletter/signup", async (req, res) => {
     try {
