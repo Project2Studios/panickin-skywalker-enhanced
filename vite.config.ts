@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react";
 import path from "path";
 import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 // import { visualizer } from 'rollup-plugin-visualizer';
-import { splitVendorChunkPlugin } from 'vite';
+// Removed splitVendorChunkPlugin to prevent React bundling issues
 
 export default defineConfig({
   plugins: [
@@ -43,6 +43,7 @@ export default defineConfig({
     },
   },
   root: path.resolve(import.meta.dirname, "client"),
+  publicDir: 'public', // Explicitly set public directory
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
@@ -60,11 +61,16 @@ export default defineConfig({
       output: {
         // Advanced manual chunk splitting for optimal caching
         manualChunks: (id) => {
-          // React ecosystem - ensure React stays together
+          // React ecosystem - ensure React and ALL its dependencies stay together
+          // This prevents the "Cannot read properties of undefined (reading 'useState')" error
           if (id.includes('node_modules/react/') || 
               id.includes('node_modules/react-dom/') || 
+              id.includes('/react/') ||
+              id.includes('/react-dom/') ||
               id.includes('react/jsx-runtime') || 
-              id.includes('react/jsx-dev-runtime')) {
+              id.includes('react/jsx-dev-runtime') ||
+              id.includes('@remix-run/router') || // React Router dependency
+              id.includes('scheduler')) { // React scheduler
             return 'react-vendor';
           }
           // Radix UI components
@@ -170,6 +176,7 @@ export default defineConfig({
       'react-dom',
       'react/jsx-runtime',
       'react/jsx-dev-runtime',
+      'scheduler', // Include React's scheduler to prevent issues
       'framer-motion',
       '@tanstack/react-query',
       'lucide-react',

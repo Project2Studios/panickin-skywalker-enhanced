@@ -40,7 +40,8 @@
       "Bash(lsof:*)",
       "mcp__context7__resolve-library-id",
       "mcp__context7__get-library-docs",
-      "Bash(pkill:*)"
+      "Bash(pkill:*)",
+      "Bash(grep:*)"
     ],
     "deny": [],
     "ask": []
